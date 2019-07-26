@@ -1,6 +1,5 @@
 package module;
 
-import constant.Selector;
 import exception.NaverSearchExtractorException;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
@@ -16,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static constant.Path.TEST_HTML_COPY_PATH;
+import static constant.Path.TEST_HTML_PATH_IN_RESOURCE;
 import static exception.NaverSearchExtractorExceptionCode.FILE_IO_EX_CODE;
 
 public class NaverDataLabExtractor {
@@ -36,13 +37,13 @@ public class NaverDataLabExtractor {
     public void run() throws NaverSearchExtractorException, IOException {
         try {
             String html = readHtmlFromTestFileOnTest();
-            List<String> titleListContainRankNum = elementsParser.getElementValuesListBySelector(html, Selector.CATEGORY_KEYWORD_RANK_TITLE);
-            List<String> rankNumList = elementsParser.getElementValuesListBySelector(html, Selector.CATEGORY_KEYWORD_RANK_NUM);
-            insertRankListToSet(titleListContainRankNum, rankNumList);
-            for (Iterator<Map> it = rankSet.iterator(); it.hasNext(); ) {
-                Map map = it.next();
-                System.out.println(map.toString());
-            }
+//            List<String> titleListContainRankNum = elementsParser.getElementValuesListBySelector(html, Selector.CATEGORY_KEYWORD_RANK_TITLE);
+//            List<String> rankNumList = elementsParser.getElementValuesListBySelector(html, Selector.CATEGORY_KEYWORD_RANK_NUM);
+//            insertRankListToSet(titleListContainRankNum, rankNumList);
+//            for (Iterator<Map> it = rankSet.iterator(); it.hasNext(); ) {
+//                Map map = it.next();
+//                System.out.println(map.toString());
+//            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -65,7 +66,7 @@ public class NaverDataLabExtractor {
         try {
             webDriver = webDriverUtils.accessChromeWebDriver();
             httpConnector.setWebDriver(webDriver);
-            String html = httpConnector.getHtmlFromUrlUseWebdriver(url);
+            String html = httpConnector.getHtmlByUrlUseWebdriver(url);
             System.out.println(html);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -83,15 +84,11 @@ public class NaverDataLabExtractor {
     }
 
     private String createTestHtmlFileReturnPath() throws NaverSearchExtractorException {
-        final String ABS_DEST_TEST_HTML_PATH = "/test/home.txt";
-        final String WORKING_DIRECTORY = System.getProperty("user.dir");
-        final String COPY_PATH = String.format("%s/%s", WORKING_DIRECTORY, ABS_DEST_TEST_HTML_PATH);
-        final String TEST_HTML_PATH_IN_RESOURCE = "/test/home.txt";
         try {
             URL webDriverUrlInResource = getClass().getResource(TEST_HTML_PATH_IN_RESOURCE);
-            File homeHtml = new File(COPY_PATH);
+            File homeHtml = new File(TEST_HTML_COPY_PATH);
             FileUtils.copyURLToFile(webDriverUrlInResource, homeHtml);
-            return COPY_PATH;
+            return TEST_HTML_COPY_PATH;
         } catch (IOException e) {
             throw new NaverSearchExtractorException(e, FILE_IO_EX_CODE);
         }

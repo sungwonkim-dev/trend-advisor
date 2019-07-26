@@ -71,8 +71,6 @@ public class ElementsParser {
 
     private Elements selectElementsByCssQuery(Document document, String cssQuery) throws NaverSearchExtractorException {
         Elements elements = document.select(cssQuery);
-        if (elements == null || elements.size() == 0)
-            throw new NaverSearchExtractorException(String.format("%s is invaild cssQuery", cssQuery), INVALID_VALUE_EX_CODE);
         return elements;
     }
 
