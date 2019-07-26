@@ -1,8 +1,8 @@
 package module;
 
-import utils.ElementsParser;
-import utils.HttpConnector;
-import utils.JSONParser;
+import util.ElementsParser;
+import util.HttpConnector;
+import util.JSONParser;
 
 public class NaverShoppingInsightExtractor {
     private ElementsParser elementsParser;

@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import exception.NaverSearchExtractorException;
 import org.jsoup.Jsoup;
@@ -18,23 +18,23 @@ public class ElementsParser {
     private final int ATTR_KEY_INDEX = 1;
     private final int POSITION_INDEX = 2;
 
-    protected String getFirstElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
+    public String getFirstElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
         String[] convertedSelectorArray = convertSelctorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
         Element element = getFirstElement(elements);
-        return parseAttrTextByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
+        return parseAttrByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
     }
 
-    protected String getElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
+    public String getElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
         String[] convertedSelectorArray = convertSelctorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
         Element element = getElementByIndex(elements, convertedSelectorArray[POSITION_INDEX]);
-        return parseAttrTextByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
+        return parseAttrByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
     }
 
-    protected List<String> getElementValuesListBySelector(String html, String selector) throws NaverSearchExtractorException {
+    public List<String> getElementValuesListBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
         String[] convertedSelectorArray = convertSelctorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
@@ -42,11 +42,11 @@ public class ElementsParser {
         return attrList;
     }
 
-    private List<String> parseAttrList(Elements elements, String attrKey) {
+    private List<String> parseAttrList(Elements elements, String attrKey) throws NaverSearchExtractorException {
         List<String> attrList = new ArrayList<String>();
 
         for (Element element : elements) {
-            String attr = element.attr(attrKey);
+            String attr = parseAttrByAttrKey(element, attrKey);
             if (StringUtils.isNotBlank(attr))
                 attrList.add(attr);
         }
@@ -76,7 +76,7 @@ public class ElementsParser {
         return elements;
     }
 
-    private String parseAttrTextByAttrKey(Element element, String attrKey) throws NaverSearchExtractorException {
+    private String parseAttrByAttrKey(Element element, String attrKey) throws NaverSearchExtractorException {
         String attr = null;
         if (StringUtils.equals(attrKey, "text"))
             attr = element.text();
@@ -112,9 +112,9 @@ public class ElementsParser {
             document = Jsoup.parse(html);
             if (document == null || !document.hasText())
                 throw new NaverSearchExtractorException("Wrong html. please check input html.", DOCUMENT_PARSE_EX_CODE);
+            return document;
         } catch (Exception ex) {
             throw new NaverSearchExtractorException(ex, DOCUMENT_PARSE_EX_CODE);
         }
-        return document;
     }
 }
