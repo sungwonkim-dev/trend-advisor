@@ -80,38 +80,78 @@ public class HttpConnector {
         }
     }
 
-    public void searchByParameter(String category, String[] parameters) throws InterruptedException {
-        category = String.format(N_STRING_FORMAT_CATEGORY, category);
+    public void searchByStartDate(String[] date) throws InterruptedException {
 
-        String year = String.format(N_STRING_FORMAT_START_YEAR, parameters[0]);
-        String month = String.format(N_STRING_FORMAT_START_MONTH, parameters[1]);
-        String day = String.format(N_STRING_FORMAT_START_DAY, parameters[2]);
+        String year = String.format(N_STRING_FORMAT_START_YEAR, date[0]);
+        String month = String.format(N_STRING_FORMAT_START_MONTH, date[1]);
+        String day = String.format(N_STRING_FORMAT_START_DAY, date[2]);
 
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(N_CATEGORY)).click();
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(category)).click();
+        clickElementByXPathWithSleep(N_START_YEAR);
+        clickElementByXPathWithSleep(year);
 
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(N_START_YEAR)).click();
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(year)).click();
+        clickElementByXPathWithSleep(N_START_MONTH);
+        clickElementByXPathWithSleep(month);
 
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(N_START_MONTH)).click();
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(month)).click();
+        clickElementByXPathWithSleep(N_START_DAY);
+        clickElementByXPathWithSleep(day);
+        clickElementByXPathWithSleep(N_SEARCH);
 
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(N_START_DAY)).click();
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(day)).click();
-        sleep(random.nextInt(1000) + 1000);
-        webDriver.findElement(new By.ByXPath(N_SEARCH)).click();
     }
 
-    public void moveNextRankPage() throws InterruptedException {
+    public void searchByStartDateAndEndDate(String[] startDate, String[] endDate) throws InterruptedException {
+
+        String sYear = String.format(N_STRING_FORMAT_START_YEAR, startDate[0]);
+        String sMonth = String.format(N_STRING_FORMAT_START_MONTH, startDate[1]);
+        String sDay = String.format(N_STRING_FORMAT_START_DAY, startDate[2]);
+
+        String eYear = String.format(N_STRING_FORMAT_END_YEAR, endDate[0]);
+        String eMonth = String.format(N_STRING_FORMAT_END_MONTH, endDate[1]);
+        String eDay = String.format(N_STRING_FORMAT_END_DAY, endDate[2]);
+
+        clickElementByXPathWithSleep(N_START_YEAR);
+        clickElementByXPathWithSleep(sYear);
+
+        clickElementByXPathWithSleep(N_START_MONTH);
+        clickElementByXPathWithSleep(sMonth);
+
+        clickElementByXPathWithSleep(N_START_DAY);
+        clickElementByXPathWithSleep(sDay);
+
+        clickElementByXPathWithSleep(N_END_YEAR);
+        clickElementByXPathWithSleep(eYear);
+
+        clickElementByXPathWithSleep(N_END_MONTH);
+        clickElementByXPathWithSleep(eMonth);
+
+        clickElementByXPathWithSleep(N_END_DAY);
+        clickElementByXPathWithSleep(eDay);
+
+
+        clickElementByXPathWithSleep(N_SEARCH);
+    }
+
+
+    public void moveNextRankPageWithSleep() throws InterruptedException {
         sleep(random.nextInt(5000) + 2000);
         webDriver.findElement(new By.ByXPath(XPath.N_NEXT_PAGE)).click();
     }
+
+    public void setCategory(String category) throws InterruptedException {
+        category = String.format(N_STRING_FORMAT_CATEGORY, category);
+        clickElementByXPathWithSleep(N_CATEGORY);
+        clickElementByXPathWithSleep(category);
+    }
+
+    private void clickElementByXPathWithSleep(String xPath) throws InterruptedException {
+        sleep(random.nextInt(3000) + 1000);
+        By byXPath = new By.ByXPath(xPath);
+        webDriver.findElement(byXPath).click();
+    }
+
+    private void clickElementBySelectorWithSleep(String selector) throws InterruptedException {
+        sleep(random.nextInt(1000) + 1000);
+        By bySelector = By.cssSelector(selector);
+        webDriver.findElement(bySelector).click();
+    }
+
 }
