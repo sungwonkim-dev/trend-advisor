@@ -7,22 +7,17 @@ import javafx.util.Pair;
 import org.openqa.selenium.WebDriver;
 import util.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static constant.Path.WORKING_DIRECTORY;
 import static exception.NaverSearchExtractorExceptionCode.UNDEFINED_EX_CODE;
 import static java.lang.Thread.sleep;
 
 public class AuctionSalesTableMaker {
     private ElementsParser elementsParser;
     private HttpConnector httpConnector;
-    private JSONParser jsonParser;
-    private WebDriverUtils webDriverUtils;
+    private ResourceUtils resourceUtils;
     private List<Pair> salesList;
     private List<Pair> salesCountList;
     private DateUtils dateUtils;
@@ -30,12 +25,11 @@ public class AuctionSalesTableMaker {
 
     public void init(String category) {
         this.elementsParser = new ElementsParser();
-        this.jsonParser = new JSONParser();
         this.httpConnector = new HttpConnector();
         this.salesList = new ArrayList<>();
         this.salesCountList = new ArrayList<>();
         this.dateUtils = new DateUtils();
-        this.webDriverUtils = new WebDriverUtils();
+        this.resourceUtils = new ResourceUtils();
         this.category = category;
     }
 
@@ -43,7 +37,7 @@ public class AuctionSalesTableMaker {
         try {
             makeSalesListInNaverShoppingInsight(category);
             searchSalesCountInAuctionBySalesList();
-            makeCsvFileByResult(category);
+            makeSalesTableToCsv();
         } catch (Exception ex) {
             throw new NaverSearchExtractorException(ex, UNDEFINED_EX_CODE);
         }
@@ -51,12 +45,13 @@ public class AuctionSalesTableMaker {
 
     private void makeSalesListInNaverShoppingInsight(String category) throws NaverSearchExtractorException, InterruptedException {
         try {
-            WebDriver chromeWebDriver = webDriverUtils.accessChromeWebDriver();
+            WebDriver chromeWebDriver = resourceUtils.accessChromeWebDriver();
             this.httpConnector.setWebDriver(chromeWebDriver);
             this.httpConnector.movePageByUrl(Url.N_SHOPPING_INSIGHT_HOME);
 
-            String[] dateParameter = dateUtils.makeParameterArrayByYesterday();
-            this.httpConnector.searchByParameter(category, dateParameter);
+            String[] startDate = dateUtils.makeParameterArrayByYesterday();
+            this.httpConnector.setCategory(category);
+            this.httpConnector.searchByStartDate(startDate);
 
             extractRankDataInShoppingInsight();
         } catch (Exception ex) {
@@ -80,7 +75,7 @@ public class AuctionSalesTableMaker {
                     Pair<String, String> sales = new Pair<>(rankNum, title);
                     salesList.add(sales);
                 }
-            httpConnector.moveNextRankPage();
+            this.httpConnector.moveNextRankPageWithSleep();
         }
     }
 
@@ -128,25 +123,7 @@ public class AuctionSalesTableMaker {
         return total;
     }
 
-    private void makeCsvFileByResult(String category) throws IOException {
-        File csv = new File(String.format("%s/%s_%s.csv", WORKING_DIRECTORY, category, dateUtils.getYesterdayString()));
-        if (csv.exists())
-            csv.delete();
-
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(csv));
-
-        bufferedWriter.write("rank,item,purchase,review");
-        bufferedWriter.newLine();
-        for (int index = 0; index < salesCountList.size(); index++) {
-            String rank = salesList.get(index).getKey().toString().trim();
-            String item = salesList.get(index).getValue().toString().trim();
-            String purchase = salesCountList.get(index).getKey().toString().trim();
-            String review = salesCountList.get(index).getValue().toString().trim();
-
-            bufferedWriter.write(String.format("%s,%s,%s,%s", rank, item, purchase, review));
-            bufferedWriter.newLine();
-        }
-        bufferedWriter.flush();
-        bufferedWriter.close();
+    private void makeSalesTableToCsv() throws IOException {
+        resourceUtils.makeSalesTableToCsvByLists(category, salesList, salesCountList, dateUtils.getYesterdayString());
     }
 }
