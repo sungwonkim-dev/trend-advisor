@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static constant.Selector.*;
 import static exception.NaverSearchExtractorExceptionCode.UNDEFINED_EX_CODE;
 import static java.lang.Thread.sleep;
 
@@ -19,7 +20,7 @@ public class AuctionSalesTableMaker {
     private HttpConnector httpConnector;
     private ResourceUtils resourceUtils;
     private List<Pair> salesList;
-    private List<Pair> salesCountList;
+    private List<String> salesInfoList;
     private DateUtils dateUtils;
     private String category;
 
@@ -27,7 +28,7 @@ public class AuctionSalesTableMaker {
         this.elementsParser = new ElementsParser();
         this.httpConnector = new HttpConnector();
         this.salesList = new ArrayList<>();
-        this.salesCountList = new ArrayList<>();
+        this.salesInfoList = new ArrayList<>();
         this.dateUtils = new DateUtils();
         this.resourceUtils = new ResourceUtils();
         this.category = category;
@@ -82,48 +83,45 @@ public class AuctionSalesTableMaker {
     private void searchSalesCountInAuctionBySalesList() throws Exception {
         final int MAX_SEARCH_PAGE = 5;
         for (Pair sales : salesList) {
-            int purchaseNum = 0;
-            int review = 0;
             String item = sales.getValue().toString();
             for (int page = 1; page <= MAX_SEARCH_PAGE; page++) {
                 String searchUrl = null;
                 try {
                     searchUrl = String.format(Url.A_STRING_FORMAT_SEARCH_BY_KEYAWORD, item, page);
                     String html = this.httpConnector.getHtmlFromUrl(searchUrl);
-                    purchaseNum = purchaseNum + countPurchaseNum(html);
-                    review = review + countReview(html);
+                    List<String> itemList = elementsParser.getElementStringListBySelector(html, DIV_ITEM_INFO);
+                    extractItemListInfo(itemList, sales);
                     sleep(8000);
                 } catch (Exception ex) {
                     System.out.println(String.format("fail in searchSalesCountInAuctionBySalesList. url : %s, msg : %s", searchUrl, ex.getMessage()));
                     continue;
                 }
             }
-            Pair<String, String> counts = new Pair<>(String.valueOf(purchaseNum), String.valueOf(review));
-            salesCountList.add(counts);
         }
-    }
-
-    private int countPurchaseNum(String html) throws NaverSearchExtractorException {
-        List<String> purchaseNumList = elementsParser.getElementValuesListBySelector(html, Selector.A_PURCHASE_NUM);
-        int total = 0;
-        for (String record : purchaseNumList) {
-            record = record.replace("구매", "").replace(",", "").trim();
-            total = total + Integer.parseInt(record);
-        }
-        return total;
-    }
-
-    private int countReview(String html) throws NaverSearchExtractorException {
-        List<String> reviewList = elementsParser.getElementValuesListBySelector(html, Selector.A_REVIEW_NUM);
-        int total = 0;
-        for (String record : reviewList) {
-            record = record.replace("후기", "").replace(",", "").trim();
-            total = total + Integer.parseInt(record);
-        }
-        return total;
     }
 
     private void makeSalesTableToCsv() throws IOException {
-        resourceUtils.makeSalesTableToCsvByLists(category, salesList, salesCountList, dateUtils.getYesterdayString());
+        resourceUtils.makeSalesTableToCsvByItemInfoList(category, salesInfoList, dateUtils.getYesterdayString());
+    }
+
+    private void extractItemListInfo(List<String> itemList, Pair sales) {
+        for (String item : itemList) {
+            try {
+                String rank = sales.getKey().toString();
+                String keyword = sales.getValue().toString();
+                String title = elementsParser.getElementValueBySelector(item, A_ITEM_TITLE).trim();
+                String link = elementsParser.getElementValueBySelector(item, A_ITEM_LINK).trim();
+                String seller = elementsParser.getElementValueBySelector(item, SPAN_SELLER).trim();
+                String purchase = elementsParser.getElementValueBySelector(item, A_PURCHASE_NUM).replace("구매", "").replace(",", "").trim();
+                String review = elementsParser.getElementValueBySelector(item, A_REVIEW_NUM).replace("후기", "").replace(",", "").trim();
+
+                String line = String.format("%s,%s,%s,%s,%s,%s,%s", rank, keyword, title, link, seller, purchase, review);
+                salesInfoList.add(line);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                continue;
+            }
+        }
     }
 }
+

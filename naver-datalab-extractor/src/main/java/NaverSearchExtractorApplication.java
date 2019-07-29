@@ -1,15 +1,10 @@
-import exception.NaverSearchExtractorException;
 import module.AuctionSalesTableMaker;
 import module.NaverShoppingInsightExtractor;
-import org.apache.commons.lang3.StringUtils;
-
-import java.io.IOException;
-import java.text.ParseException;
 
 public class NaverSearchExtractorApplication {
-    public static void main(String args[]) throws NaverSearchExtractorException, IOException {
-        System.out.println(args.length);
-        if (!(args.length == 2 || args.length == 4))
+    public static void main(String args[]) throws Exception {
+
+        if (args.length != 2 && args.length != 4)
             printUsage();
 
         String mode = args[0].trim();
@@ -39,7 +34,7 @@ public class NaverSearchExtractorApplication {
 
     private static void printUsage() {
         System.out.println("============================================================================================================================");
-        System.out.println("      usage : java -jar naver-datalab-extractor-1.0.4-jar-with-dependencies.jar {proof|rank} {category} {start} {end}");
+        System.out.println("      usage : java -jar naver-datalab-extractor-1.0.6-jar-with-dependencies.jar {proof|rank} {category} {start} {end}");
         System.out.println("-----------------------------------------------------------mode-------------------------------------------------------------");
         System.out.println("             proof - 상관 관계 증명 데이터 저장");
         System.out.println("                ex : java -jar naver-datalab-extractor-1.0.4-jar-with-dependencies.jar proof 건강");

@@ -45,22 +45,17 @@ public class ResourceUtils {
         }
     }
 
-    public void makeSalesTableToCsvByLists(String category, List<Pair> salesList, List<Pair> salesCountList, String date) throws IOException {
+    public void makeSalesTableToCsvByItemInfoList(String category, List<String> itemInfoList, String date) throws IOException {
         File csv = new File(String.format("%s/%s_%s.csv", WORKING_DIRECTORY, category, date));
         if (csv.exists())
             csv.delete();
 
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(csv));
 
-        bufferedWriter.write("rank,item,purchase,review");
+        bufferedWriter.write("rank,keyword,title,link,seller,purchase,review");
         bufferedWriter.newLine();
-        for (int index = 0; index < salesCountList.size(); index++) {
-            String rank = salesList.get(index).getKey().toString().trim();
-            String item = salesList.get(index).getValue().toString().trim();
-            String purchase = salesCountList.get(index).getKey().toString().trim();
-            String review = salesCountList.get(index).getValue().toString().trim();
-
-            bufferedWriter.write(String.format("%s,%s,%s,%s", rank, item, purchase, review));
+        for (String line : itemInfoList) {
+            bufferedWriter.write(line);
             bufferedWriter.newLine();
         }
         bufferedWriter.flush();
