@@ -20,9 +20,11 @@ import static java.lang.Thread.*;
 
 public class HttpConnector {
     private WebDriver webDriver;
+    private int sleep = 1000;
     private Random random = new Random();
 
-    public void setWebDriver(WebDriver webDriver) {
+    public void setWebDriver(WebDriver webDriver, int sleep) {
+        this.sleep = sleep;
         this.webDriver = webDriver;
     }
 
@@ -32,8 +34,8 @@ public class HttpConnector {
 
     public void movePageByUrl(String url) throws NaverSearchExtractorException {
         try {
-            sleep(3000);
             webDriver.get(url);
+            sleep(sleep);
         } catch (Exception ex) {
             throw new NaverSearchExtractorException(ex, UNDEFINED_EX_CODE);
         }
@@ -41,7 +43,7 @@ public class HttpConnector {
 
     public String getCurHtmlUseWebdriver() throws NaverSearchExtractorException {
         try {
-            sleep(3000);
+            sleep(sleep);
             return webDriver.getPageSource();
         } catch (Exception ex) {
             throw new NaverSearchExtractorException(ex, UNDEFINED_EX_CODE);
@@ -51,7 +53,7 @@ public class HttpConnector {
     public String getHtmlByUrlUseWebdriver(String url) throws NaverSearchExtractorException {
         try {
             webDriver.get(url);
-            sleep(3000);
+            sleep(sleep);
             return webDriver.getPageSource();
         } catch (Exception ex) {
             throw new NaverSearchExtractorException(ex, UNDEFINED_EX_CODE);
@@ -98,7 +100,7 @@ public class HttpConnector {
 
     }
 
-    public void searchByStartDateAndEndDate(String[] startDate, String[] endDate) throws InterruptedException {
+    public void searchByStartDateAndEndDate(String[] startDate, String[] endDate, String[] lastDate) throws InterruptedException {
 
         String sYear = String.format(N_STRING_FORMAT_START_YEAR, startDate[0]);
         String sMonth = String.format(N_STRING_FORMAT_START_MONTH, startDate[1]);
@@ -107,6 +109,19 @@ public class HttpConnector {
         String eYear = String.format(N_STRING_FORMAT_END_YEAR, endDate[0]);
         String eMonth = String.format(N_STRING_FORMAT_END_MONTH, endDate[1]);
         String eDay = String.format(N_STRING_FORMAT_END_DAY, endDate[2]);
+
+        String initYear = String.format(N_STRING_FORMAT_END_YEAR, lastDate[0]);
+        String initMonth = String.format(N_STRING_FORMAT_END_MONTH, lastDate[1]);
+        String initDay = String.format(N_STRING_FORMAT_END_DAY, lastDate[2]);
+
+        clickElementByXPathWithSleep(N_END_YEAR);
+        clickElementByXPathWithSleep(initYear);
+
+        clickElementByXPathWithSleep(N_END_MONTH);
+        clickElementByXPathWithSleep(initMonth);
+
+        clickElementByXPathWithSleep(N_END_DAY);
+        clickElementByXPathWithSleep(initDay);
 
         clickElementByXPathWithSleep(N_START_YEAR);
         clickElementByXPathWithSleep(sYear);
@@ -126,13 +141,14 @@ public class HttpConnector {
         clickElementByXPathWithSleep(N_END_DAY);
         clickElementByXPathWithSleep(eDay);
 
-
         clickElementByXPathWithSleep(N_SEARCH);
+
+        Thread.sleep(sleep);
     }
 
 
     public void moveNextRankPageWithSleep() throws InterruptedException {
-        sleep(random.nextInt(5000) + 2000);
+        sleep(random.nextInt(sleep) + 2000);
         webDriver.findElement(new By.ByXPath(XPath.N_NEXT_PAGE)).click();
     }
 
@@ -143,15 +159,21 @@ public class HttpConnector {
     }
 
     private void clickElementByXPathWithSleep(String xPath) throws InterruptedException {
-        sleep(random.nextInt(3000) + 1000);
+        sleep(random.nextInt(sleep) + 1000);
         By byXPath = new By.ByXPath(xPath);
         webDriver.findElement(byXPath).click();
     }
 
     private void clickElementBySelectorWithSleep(String selector) throws InterruptedException {
-        sleep(random.nextInt(1000) + 1000);
+        sleep(random.nextInt(sleep) + 1000);
         By bySelector = By.cssSelector(selector);
         webDriver.findElement(bySelector).click();
     }
 
+    public void reloadRankInShoppingInsight() throws InterruptedException {
+        sleep(random.nextInt(sleep) + 2000);
+        webDriver.findElement(new By.ByXPath(XPath.N_NEXT_PAGE)).click();
+        sleep(random.nextInt(sleep) + 2000);
+        webDriver.findElement(new By.ByXPath(XPath.N_PREV_PAGE)).click();
+    }
 }

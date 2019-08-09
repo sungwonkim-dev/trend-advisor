@@ -22,4 +22,5 @@ public final class XPath {
 
     public static final String N_SEARCH = "//*[@id=\"content\"]/div[2]/div/div[1]/div/a";
     public static final String N_NEXT_PAGE = "//*[@id=\"content\"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/a[2]";
+    public static final String N_PREV_PAGE = "//*[@id=\"content\"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/a[1]";
 }

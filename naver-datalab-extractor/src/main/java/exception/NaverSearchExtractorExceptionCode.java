@@ -8,6 +8,8 @@ public final class NaverSearchExtractorExceptionCode {
 
     public static final int INVALID_VALUE_EX_CODE = 403;
     public static final int FILE_IO_EX_CODE = 404;
+    public static final int INVALIDATION_EX_CODE = 405;
+
     public static final int UNDEFINED_EX_CODE = 499;
 
 }

@@ -20,7 +20,7 @@ public class ElementsParser {
 
     public String getFirstElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
-        String[] convertedSelectorArray = convertSelctorToArray(selector);
+        String[] convertedSelectorArray = convertSelectorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
         Element element = getFirstElement(elements);
         return parseAttrByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
@@ -28,7 +28,7 @@ public class ElementsParser {
 
     public String getElementValueBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
-        String[] convertedSelectorArray = convertSelctorToArray(selector);
+        String[] convertedSelectorArray = convertSelectorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
         Element element = getElementByIndex(elements, convertedSelectorArray[POSITION_INDEX]);
         return parseAttrByAttrKey(element, convertedSelectorArray[ATTR_KEY_INDEX]);
@@ -36,11 +36,23 @@ public class ElementsParser {
 
     public List<String> getElementValuesListBySelector(String html, String selector) throws NaverSearchExtractorException {
         Document document = convertHtmlToDocument(html);
-        String[] convertedSelectorArray = convertSelctorToArray(selector);
+        String[] convertedSelectorArray = convertSelectorToArray(selector);
         Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
         List<String> attrList = parseAttrList(elements, convertedSelectorArray[ATTR_KEY_INDEX]);
         return attrList;
     }
+
+    public List<String> getElementStringListBySelector(String html, String selector) throws NaverSearchExtractorException {
+        List<String> elementStringList = new ArrayList<>();
+        Document document = convertHtmlToDocument(html);
+        String[] convertedSelectorArray = convertSelectorToArray(selector);
+        Elements elements = selectElementsByCssQuery(document, convertedSelectorArray[CSSQUERY_INDEX]);
+        for (Element element : elements) {
+            elementStringList.add(element.toString());
+        }
+        return elementStringList;
+    }
+
 
     private List<String> parseAttrList(Elements elements, String attrKey) throws NaverSearchExtractorException {
         List<String> attrList = new ArrayList<String>();
@@ -61,7 +73,8 @@ public class ElementsParser {
             throw new NaverSearchExtractorException(String.format("%s can't convert to Integer.", index), INVALID_VALUE_EX_CODE);
         }
         if (elements.size() <= position)
-            throw new NaverSearchExtractorException(String.format("elements size : %d , position : %d. position must over than elements size ", elements.size(), position), INVALID_VALUE_EX_CODE);
+            return null;
+            //throw new NaverSearchExtractorException(String.format("elements size : %d , position : %d. position must over than elements size ", elements.size(), position), INVALID_VALUE_EX_CODE);
         return elements.get(position);
     }
 
@@ -75,28 +88,30 @@ public class ElementsParser {
     }
 
     private String parseAttrByAttrKey(Element element, String attrKey) throws NaverSearchExtractorException {
-        String attr = null;
+        String attr = "";
+        if (element == null)
+            return attr;
         if (StringUtils.equals(attrKey, "text"))
             attr = element.text();
         else if (StringUtils.equals(attrKey, "id"))
             attr = element.id();
         else attr = element.attr(attrKey);
-
-        if (StringUtils.isBlank(attr))
-            throw new NaverSearchExtractorException("selector is blank. please check input selector.", STRING_BLANK_EX_CODE);
-
+//      필요한지 검증 필요 (2019.07.29)
+//        if (StringUtils.isBlank(attr))
+//            throw new NaverSearchExtractorException("selector is blank. please check input selector.", STRING_BLANK_EX_CODE);
         return attr;
     }
 
     private void checkVaildSelector(String selector) throws NaverSearchExtractorException {
         if (StringUtils.isBlank(selector))
             throw new NaverSearchExtractorException("selector is blank. please check input selector.", STRING_BLANK_EX_CODE);
-        String SELECTOR_SPLITTER = "//";
-        if (StringUtils.containsNone(selector, SELECTOR_SPLITTER))
-            throw new NaverSearchExtractorException(String.format("%s is invaild selector", selector), INVALID_VALUE_EX_CODE);
+//        필요한지 검증 필요 (2019.07.29)
+//        final String SELECTOR_SPLITTER = "//";
+//        if (StringUtils.containsNone(selector, SELECTOR_SPLITTER))
+//            throw new NaverSearchExtractorException(String.format("%s is invaild selector", selector), INVALID_VALUE_EX_CODE);
     }
 
-    private String[] convertSelctorToArray(String selector) throws NaverSearchExtractorException {
+    private String[] convertSelectorToArray(String selector) throws NaverSearchExtractorException {
         checkVaildSelector(selector);
         return selector.split("//");
     }

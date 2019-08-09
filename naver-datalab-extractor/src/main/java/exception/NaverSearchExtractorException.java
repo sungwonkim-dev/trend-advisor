@@ -12,4 +12,8 @@ public class NaverSearchExtractorException extends Exception {
         super(ex);
         this.exceptionCode = exceptionCode;
     }
+
+    public int getExceptionCode() {
+        return exceptionCode;
+    }
 }
