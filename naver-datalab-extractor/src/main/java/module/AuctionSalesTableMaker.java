@@ -23,8 +23,10 @@ public class AuctionSalesTableMaker {
     private List<String> salesInfoList;
     private DateUtils dateUtils;
     private String category;
+    private String chromeVersion;
+    private int sleep;
 
-    public void init(String category) {
+    public void init(String category, String chromeVersion, int sleep) {
         this.elementsParser = new ElementsParser();
         this.httpConnector = new HttpConnector();
         this.salesList = new ArrayList<>();
@@ -32,6 +34,8 @@ public class AuctionSalesTableMaker {
         this.dateUtils = new DateUtils();
         this.resourceUtils = new ResourceUtils();
         this.category = category;
+        this.chromeVersion = chromeVersion;
+        this.sleep = sleep;
     }
 
     public void run() throws NaverSearchExtractorException, IOException {
@@ -46,8 +50,8 @@ public class AuctionSalesTableMaker {
 
     private void makeSalesListInNaverShoppingInsight(String category) throws NaverSearchExtractorException, InterruptedException {
         try {
-            WebDriver chromeWebDriver = resourceUtils.accessChromeWebDriver();
-            this.httpConnector.setWebDriver(chromeWebDriver);
+            WebDriver chromeWebDriver = resourceUtils.accessChromeWebDriver(chromeVersion);
+            this.httpConnector.setWebDriver(chromeWebDriver,this.sleep);
             this.httpConnector.movePageByUrl(Url.N_SHOPPING_INSIGHT_HOME);
 
             String[] startDate = dateUtils.makeParameterArrayByYesterday();
@@ -91,7 +95,6 @@ public class AuctionSalesTableMaker {
                     String html = this.httpConnector.getHtmlFromUrl(searchUrl);
                     List<String> itemList = elementsParser.getElementStringListBySelector(html, DIV_ITEM_INFO);
                     extractItemListInfo(itemList, sales);
-                    sleep(8000);
                 } catch (Exception ex) {
                     System.out.println(String.format("fail in searchSalesCountInAuctionBySalesList. url : %s, msg : %s", searchUrl, ex.getMessage()));
                     continue;

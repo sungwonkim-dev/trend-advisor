@@ -45,6 +45,7 @@ public class DateUtils {
         int loop = (int) (day / 7);
         for (int index = 0; index <= loop; index++) {
             parameterList.add(simpleDateFormat.format(startDateTime.plusDays(index * 7).toDate()).split("/"));
+            parameterList.add(simpleDateFormat.format(startDateTime.plusDays((index * 7) + 6).toDate()).split("/"));
         }
         return parameterList;
     }
