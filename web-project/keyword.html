@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/Chart.min.css" rel="stylesheet">
+    <title>main screen</title>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#" onclick="location.reload()">
+                        <img src="assets/images/title.png">
+                    </a>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#homeBtn" onclick="location.href='index.html'">Home</a></li>
+                    <li class="active"><a href="#" id="searchBtn" onclick="location.href='keyword.html'">키워드</a></li>
+                    <li><a href="#" id="chartBtn" onclick="location.href='graph.html'">그래프</a></li>
+                </ul>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="myBar"></div>
+            </div>
+        </nav>
+
+    </header>
+    
+    <div class="container-fluid" style="background: white">
+        <div class="container">
+            <div class="first-area key-word-area" id="search">
+                <h1>키워드 뿌려주는 곳</h1>
+                <p>추천 키워드입니다.</p>
+                <button type="button" class="btn btn-primary" onclick="recommendationMove()">가정용품<span
+                        class="badge">0</span></button>
+                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
+                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
+                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
+                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
+                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
+                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
+                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
+                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
+                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
+                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
+                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
+                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
+                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
+                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
+                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
+                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
+                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
+                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
+                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
+                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
+                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
+                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
+                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <p style="color:gray">web develop by rolling stone</p>
+                    </div>
+                    <div class="col-md-6"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+
+<script src="assets/js/jquery-3.4.1.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/Chart.min.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/main-chart.js"></script>
+
+</html>
