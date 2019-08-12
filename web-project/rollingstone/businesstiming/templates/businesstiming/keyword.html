@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/main.css" rel="stylesheet">
-    <link href="assets/css/Chart.min.css" rel="stylesheet">
+    <link href="{% static 'assets/css/bootstrap.min.css'%}" rel="stylesheet">
+    <link href="{% static 'assets/css/main.css'%}" rel="stylesheet">
+    <link href="{% static 'assets/css/Chart.min.css'%}" rel="stylesheet">
     <title>main screen</title>
 </head>
 
@@ -14,21 +14,18 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#" onclick="location.reload()">
-                        <img src="assets/images/title.png">
+                        <img src="{% static 'assets/images/title.png'%}" alt="logo">
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#homeBtn" onclick="location.href='index.html'">Home</a></li>
-                    <li class="active"><a href="#" id="searchBtn" onclick="location.href='keyword.html'">키워드</a></li>
-                    <li><a href="#" id="chartBtn" onclick="location.href='graph.html'">그래프</a></li>
+                    <li><a href="/" onclick="location.href='/'">Home</a></li>
+                    <li class="active"><a href="/keyword" id="searchBtn">키워드</a></li>
+                    <li><a href="/graph" id="chartBtn">그래프</a></li>
                 </ul>
             </div>
-            <div class="progress-container">
-                <div class="progress-bar" id="myBar"></div>
-            </div>
         </nav>
-
     </header>
+
     
     <div class="container-fluid" style="background: white">
         <div class="container">
@@ -79,11 +76,11 @@
     </footer>
 </body>
 
+<script src="{% static 'assets/js/jquery-3.4.1.min.js'%}"></script>
+<script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
+<script src="{% static 'assets/js/Chart.min.js' %}"></script>
+<script src="{% static 'assets/js/main.js'%}"></script>
+<script src="{% static 'assets/js/main-chart.js'%}"></script>
 
-<script src="assets/js/jquery-3.4.1.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/Chart.min.js"></script>
-<script src="assets/js/main.js"></script>
-<script src="assets/js/main-chart.js"></script>
 
 </html>
