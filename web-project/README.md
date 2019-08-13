@@ -3,18 +3,28 @@
 #### 주의) 현재 개발버전은 아나콘다 환경이 아니므로 아나콘다 가상환경 실행중일시 `conda deactivate` 로 아나콘다 가상환경을 꺼주신뒤 사용해주시기 바랍니다.
 
 0. 윈도우에서는 cmd, 리눅스 혹은 맥 환경에서는 shell로 실행시킵니다.
+
 1. 장고 프레임워크를 사용하기 위한 가상환경 실행법 입니다.  
    `web-develop/venv/bin` 폴더로 이동  
-   리눅스 환경에서는 `source activate`  
+   리눅스(맥) 환경에서는 `source activate`  
    윈도우 환경에서는 `activate`
-3. 다음 명령어로 로컬 서버를 실행시킵니다.  
+   
+2. 다음 명령어로 로컬 서버를 실행시킵니다.  
    `web-develop/rollingstone`으로 이동  
-   리눅스 환경에서는 `python3 manage.py runserver`  
+   리눅스(맥) 환경에서는 `python3 manage.py runserver`  
    윈도우 환경에서는 `python manage.py runserver`  
    디폴트 포트번호는 8000 입니다만 본인의 포트번호가 다르게 설정되어있다면 실행이 안될 수도 있습니다.  
-   그럴 경우에는 윈도우 `python manage.py runserver 8000` / 리눅스(맥) `python3 manage.py runserver 8000`으로 실행해보십시오.  
-   서버가 실행되고 있는동안은 shell 혹은 cmd 창을 끄지마십시오.
-4. 다음은 웹 브라우저에서 실행법입니다.  
+   그럴 경우에는 리눅스(맥) `python3 manage.py runserver 8000` / 윈도우 `python manage.py runserver 8000`으로 실행해보십시오.  
+   서버가 실행되고 있는동안은 shell 혹은 cmd 창을 끄지마십시오.  
+   
+   #### (option)
+   만일 가상환경에서 사용하고 싶지 않거나 가상환경에 설치된 패키지가 제대로 작동하지 않을시 다음 명령어를 실행하여 주십시오.  
+   `web-develop/rollingstone` 폴더로 이동 합니다.  
+   리눅스(맥) : `pip3 install -r requirements.txt`  
+   윈도우 : `pip install -r requirements.txt`  
+   해당 프레임워크를 사용하는데 필요한 패키지가 설치됩니다.  
+   
+3. 다음은 웹 브라우저에서 실행법입니다.  
    웹 브라우저를 실행합니다.  
    주소창에 `localhost:8000` 혹은 `127.0.0.1:8000`을 작성하고 엔터를 누릅니다.  
    다음과 같은 화면이 나오면 정상작동되는 것 입니다.  
