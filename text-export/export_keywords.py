@@ -2,9 +2,10 @@ import json
 import re
 import os
 import text_rank as tr
-from konlpy.tag import Okt
+from konlpy.tag import Okt, Kkma
 from collections import Counter
 
+# 기사 읽기
 workDir = os.path.abspath('./news/')
 filename_list = []
 contents = []
@@ -18,43 +19,27 @@ for filename in filename_list:
 		text = json.load(json_file)
 		content = text["detail"]["CONTENT"]
 		content = re.sub('<.+?>', '', content, 0).strip()
-		contents.append(content)
-print(len(contents))
+		contents.append([text["detail"]["NEWS_ID"], text["detail"]["TITLE"], content])
+
+# print(contents[0][0])
+# print(contents[0][1])
+# contents = [ [ 기사ID, 기사제목 , 기사내용 ], ...]
 for content in contents:
-	textrank = tr.TextRank(content)
-	for row in textrank.summarize(1):
-		print(row)
-		print()
-	print('keyword :', textrank.keywords())
+        try:
+            # 기사내용 요약
+            textrank = tr.TextRank(content[2])
+            summ = textrank.summarize(3)
+            summ = "\n".join(summ)
+            # 요약본에서 키워드 추출
+            summ_keywords = tr.TextRank(summ)
+            keywords = summ_keywords.keywords()
+            print("#", content[0])
+            # print(summ)
+            print(keywords)
+            print()
+        except:
+            print("###ERROR###")
+            print(content[0])
 
 
-'''
-with open('./text.json', 'r', encoding="utf-8") as json_file:
-	text = json.load(json_file)
 
-# 제목이랑 내용 가져오기
-title = text["detail"]["TITLE"]
-content = text["detail"]["CONTENT"]
-
-# 태그 없애기
-content = re.sub('<.+?>', '', content, 0).strip()
-okt = Okt()
-nouns = okt.pos(content)
-print(nouns)
-
-count = Counter(nouns)
-
-tag_count = []
-tags = []
-print(content)
-for n, c in count.most_common(30):
-	dics = {'tag':n, 'count':c}
-	if dics['count'] <= 2:
-		break
-	if len(dics['tag']) >= 2 and len(tags) <= 49:
-		tag_count.append(dics)
-		tags.append(dics['tag'])
-
-for tag in tag_count:
-	print(tag)
-'''
