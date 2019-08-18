@@ -2,6 +2,7 @@ import json
 import re
 import os
 import text_rank as tr
+import take_dict as td
 from konlpy.tag import Okt, Kkma
 from collections import Counter
 
@@ -24,22 +25,55 @@ for filename in filename_list:
 # print(contents[0][0])
 # print(contents[0][1])
 # contents = [ [ 기사ID, 기사제목 , 기사내용 ], ...]
+file_data = dict()
+output_data = []
+json_data = dict()
+cnt_key = dict()
+
+filepath = './dict/'
+keydict = td.noun_dictation(filepath)
+j = 0
 for content in contents:
         try:
-            # 기사내용 요약
+            # 기사내용 요
             textrank = tr.TextRank(content[2])
             summ = textrank.summarize(3)
             summ = "\n".join(summ)
             # 요약본에서 키워드 추출
             summ_keywords = tr.TextRank(summ)
             keywords = summ_keywords.keywords()
-            print("#", content[0])
-            # print(summ)
-            print(keywords)
-            print()
+            keywords = keydict.isit_item(keywords)
+
+            if len(keywords) != 0:
+                print("after:",keywords)
+                file_data["id"] = content[0]
+                file_data["keyword"] = keywords
+            output_data.append(file_data)
+            for ki in keywords:
+                if ki in cnt_key:
+                    cnt_key[ki] += 1
+                else:
+                    cnt_key[ki] = 1
+            if j % 10 == 0:
+                print(j, "개의 기사 키워드를 찾았습니다")
+            j += 1
+            # print("#", content[0])
+            # print(keywords)
+            # print()
         except:
-            print("###ERROR###")
+            # 요약, 키워드 추출이 안되는 기사
+            j += 1
+            print("###ERROR ARTICLE###")
             print(content[0])
 
+import operator
 
-
+cnt_key = sorted(cnt_key.items(), key=operator.itemgetter(1))
+json.dumps(cnt_key, ensure_ascii=False, indent="\t")
+with open('word_count.json', 'w', encoding='utf-8') as count_file:
+    json.dump(cnt_key, count_file, ensure_ascii=False, indent='\t')
+#json으로 저장
+json_data["ctx"] = output_data
+json.dumps(json_data, ensure_ascii=False, indent="\t")
+with open('words.json', 'w', encoding='utf-8') as make_file:
+    json.dump(json_data, make_file, ensure_ascii=False, indent='\t')
