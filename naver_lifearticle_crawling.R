@@ -89,26 +89,28 @@ repeat{
         article_urls <- c(article_urls, subclass_html %>% 
                            html_nodes("#main_content .type06 dt:first_child a") %>% html_attr("href"))
         
-        titles <- c()
-        contents <- c()
+        titles <<- c()
+        contents <<- c()
         for(k in 1 : length(article_urls)){
-          titles <- c(titles, read_html(article_urls[k]) %>% html_node(".article_info #articleTitle") %>% html_text())
-          
-          tryCatch(
+          tryCatch({
+            titles <- c(titles, read_html(article_urls[k]) %>% html_node(".article_info #articleTitle") %>% html_text())
             contents <- c(contents, (read_html(article_urls[k]) %>% html_node("#articleBodyContents") %>% html_text() %>% 
-                                       str_split(pattern = "\\}", simplify = T))[, 2] %>% trimws()),
+                                       str_split(pattern = "\\}", simplify = T))[, 2] %>% trimws())
+            },
             error = function(e){
               print(e)
-              contents <- c(contents, NA)
+              titles <<- c(titles, "")
+              contents <<- c(contents, "")
             },
             finally = NULL
           )
         }
+        titles <- titles[!is.na(titles)]
         
         data <- rbind(data, data.frame(company = companys, 
                                        date = dates, 
-                                       class = rep(class_name, length(article_urls)), 
-                                       subclass = rep(subclass_name[i], length(article_urls)), 
+                                       class = rep(class_name, length(titles)), 
+                                       subclass = rep(subclass_name[i], length(titles)), 
                                        title = titles, 
                                        content = contents))
         print(paste0("date : ", date, " / page : ", j))
@@ -116,3 +118,4 @@ repeat{
     }
   }
 }
+
