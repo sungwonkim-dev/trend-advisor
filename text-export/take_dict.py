@@ -19,12 +19,13 @@ class noun_dictation():
         # 키워드가 브랜드, 고유명사, 제품명에 속하는지 확인
         real_keywords = []
         for ki in keywords:
-            if ki in self.brand[0].values:
-                real_keywords.append(ki)
-                continue
-            if ki in self.pronoun[0].values:
-                real_keywords.append(ki)
-                continue
+            #if ki in self.brand[0].values:
+            #    real_keywords.append(ki)
+            #    continue
+            # 고유명사는 필요없을 것 같아서 지웠습니다.
+            #if ki in self.pronoun[0].values:
+            #    real_keywords.append(ki)
+            #    continue
             if ki in self.product[0].values:
                 real_keywords.append(ki)
                 continue

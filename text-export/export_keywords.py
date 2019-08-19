@@ -26,7 +26,6 @@ for filename in filename_list:
 # print(contents[0][1])
 # contents = [ [ 기사ID, 기사제목 , 기사내용 ], ...]
 file_data = dict()
-output_data = []
 json_data = dict()
 cnt_key = dict()
 
@@ -45,10 +44,9 @@ for content in contents:
             keywords = keydict.isit_item(keywords)
 
             if len(keywords) != 0:
-                print("after:",keywords)
+                print("keywords: ",keywords)
                 file_data["id"] = content[0]
                 file_data["keyword"] = keywords
-            output_data.append(file_data)
             for ki in keywords:
                 if ki in cnt_key:
                     cnt_key[ki] += 1
@@ -66,14 +64,9 @@ for content in contents:
             print("###ERROR ARTICLE###")
             print(content[0])
 
+# 숫자 카운트 
 import operator
-
 cnt_key = sorted(cnt_key.items(), key=operator.itemgetter(1))
 json.dumps(cnt_key, ensure_ascii=False, indent="\t")
 with open('word_count.json', 'w', encoding='utf-8') as count_file:
     json.dump(cnt_key, count_file, ensure_ascii=False, indent='\t')
-#json으로 저장
-json_data["ctx"] = output_data
-json.dumps(json_data, ensure_ascii=False, indent="\t")
-with open('words.json', 'w', encoding='utf-8') as make_file:
-    json.dump(json_data, make_file, ensure_ascii=False, indent='\t')
