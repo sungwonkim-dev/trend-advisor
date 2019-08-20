@@ -5,7 +5,6 @@ import text_rank as tr
 import take_dict as td
 from konlpy.tag import Okt, Kkma
 from collections import Counter
-
 # 기사 읽기
 workDir = os.path.abspath('./news/')
 filename_list = []
@@ -29,19 +28,33 @@ file_data = dict()
 json_data = dict()
 cnt_key = dict()
 
+summarize_news = [] # [id][summarize contents]
+keywords_list = []
+
 filepath = './dict/'
 keydict = td.noun_dictation(filepath)
 j = 0
 for content in contents:
         try:
-            # 기사내용 요
+            # 기사내용 요약
             textrank = tr.TextRank(content[2])
             summ = textrank.summarize(3)
             summ = "\n".join(summ)
+            # print("summarize:", summ)
+            kkma = Kkma()
+            keylist = kkma.nouns(summ)
+            tsumm = []
+            tsumm.append(content[0])
+            tsumm.append(summ)
+            summarize_news.append(tsumm)
+
             # 요약본에서 키워드 추출
-            summ_keywords = tr.TextRank(summ)
-            keywords = summ_keywords.keywords()
-            keywords = keydict.isit_item(keywords)
+            #summ_keywords = tr.TextRank(summ)
+            #keywords = summ_keywords.keywords()
+            keywords = keydict.isit_item(keylist)
+            for keyword in keywords:
+                if not keyword in keywords_list:
+                     keywords_list.append(keyword)
 
             if len(keywords) != 0:
                 print("keywords: ",keywords)
@@ -55,6 +68,8 @@ for content in contents:
             if j % 10 == 0:
                 print(j, "개의 기사 키워드를 찾았습니다")
             j += 1
+            if j > 200:
+                break
             # print("#", content[0])
             # print(keywords)
             # print()
@@ -64,9 +79,55 @@ for content in contents:
             print("###ERROR ARTICLE###")
             print(content[0])
 
-# 숫자 카운트 
-import operator
-cnt_key = sorted(cnt_key.items(), key=operator.itemgetter(1))
-json.dumps(cnt_key, ensure_ascii=False, indent="\t")
-with open('word_count.json', 'w', encoding='utf-8') as count_file:
-    json.dump(cnt_key, count_file, ensure_ascii=False, indent='\t')
+
+keyword_rank = [] #[keywords][count]
+
+for keyword in keywords_list:
+
+    count = 0
+    for summ in summarize_news:
+        if keyword in summ[1]:
+            count += 1
+            
+    temp_kr = []
+    temp_kr.append(keyword)
+    temp_kr.append(count)
+    keyword_rank.append(temp_kr)
+
+
+keyword_rank_list = sorted(keyword_rank, key=lambda keyword_rank: keyword_rank[1], reverse=True)
+
+output = [] #[rank][keyword][news_id]
+rank = 1
+
+print(keyword_rank_list)
+
+for keyword in keyword_rank_list:
+    #print(keyword)
+    for summ in summarize_news:
+        if keyword[0] in summ[1]:
+            temp_output = []
+            temp_output.append(rank)
+            temp_output.append(keyword[0])
+            temp_output.append(summ[0])
+            output.append(temp_output)
+    
+    rank += 1
+
+df = []
+temp_df = []
+
+temp_df.append("rank")
+temp_df.append("keyword")
+temp_df.append("id")
+
+df.append(temp_df)
+for temp_o in output:
+    df.append(temp_o)
+
+#print(df)
+import pandas as pd
+
+dataframe = pd.DataFrame(df)
+#print(dataframe)
+dataframe.to_csv("./keyword_ranking.csv", header=False, index=False)

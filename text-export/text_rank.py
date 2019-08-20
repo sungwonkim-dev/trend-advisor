@@ -87,8 +87,12 @@ class TextRank(object):
     def summarize(self, sent_num=3):
         summary = []
         index=[]
-        for idx in self.sorted_sent_rank_idx[:sent_num]:
+        low = 0
+        for idx in self.sorted_sent_rank_idx:
             index.append(idx)
+            if low == sent_num:
+                break
+            low += 1
         index.sort()
         for idx in index:
             summary.append(self.sentences[idx])
