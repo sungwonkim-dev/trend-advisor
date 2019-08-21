@@ -1,5 +1,19 @@
-from gensim.summarization.summarizer import summarize
+from krwordrank.word import summarize_with_keywords
+from krwordrank.sentence import summarize_with_sentences
+from konlpy.tag import Kkma, Okt
+from soynlp.noun import LRNounExtractor_v2, NewsNounExtractor
+from soynlp.utils import DoublespaceLineCorpus
+import json
+import os
+import re
 
-txt = "차 의과학대학교 분당 차병원(원장 김재화)은 오는 18일 오후 2시, 지하 2층 대강당에서 ‘위식도 역류질환과 기능성 소화불량’ 건강강좌를 개최한다. <br/><br/>소화기내과 홍성표 교수는 <span class='quot0'>위식도 역류질환과 기능성 소화불량은 식생활이 불규칙한 현대인을 괴롭히는 대표적인 질환으로 증상이 나타나면 삶의 질이 현격하게 떨어진다</span>면서 <span class='quot0'>환자가 늘고 있지만 고쳐야 하는 생활 습관을 모르고 계속 약에만 의존하는 사람들이 많다</span>고 지적했다. 홍 교수는 이번 강좌를 통해 위식도 역류질환 및 기능성 소화불량의 치료법, 예방법, 올바른 생활습관 등 환자와 일반인에 도움이 될 수 있는 정보들을 제공할 것이라고 말했다.<br/><br/>홍 교수는 2017년 소화기능성장애 운동학회의 회장을 역임했고, 30년 이상의 임상 경험을 가진 소화기질환 분야의 권위자다. 이번 강좌는 대한소화기기능성질환 운동학회 주관으로 전국적으로 시행하는 행사의 일환이다. 위식도 역류질환 및 기능성 소화불량증에 관심 있는 환자와 가족, 일반인 등 누구나 무료로 참석이 가능하다. 문의: 분당 차병원 소화기내과 (031)780-5641)"
+text = ["흑당버블티"]
+#kkma = Kkma()
+corpus_path = './text.txt'
+sents = DoublespaceLineCorpus(corpus_path, iter_sent=True)
+noun_extractor = LRNounExtractor_v2(verbose=True)
+nouns = noun_extractor.train_extract(sents)
+print(nouns)
+print(list(noun_extractor._compounds_components.items())[:5])
 
-print(summarize(txt))
+

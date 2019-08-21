@@ -27,12 +27,12 @@ class noun_dictation():
             #if ki in self.pronoun[0].values:
             #    real_keywords.append(ki)
             #    continue
-            #if ki in self.product[0].values:
-            #    real_keywords.append(ki)
-            #    continue
-            if ki in self.search[0].values:
+            if ki in self.product[0].values:
                 real_keywords.append(ki)
                 continue
+            #if ki in self.search[0].values:
+            #    real_keywords.append(ki)
+            #    continue
         # 키워드는 리스트형태로 반환됩니다.
         return real_keywords
         

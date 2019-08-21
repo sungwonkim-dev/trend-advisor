@@ -5,6 +5,7 @@ import text_rank as tr
 import take_dict as td
 from konlpy.tag import Okt, Kkma
 from collections import Counter
+from gensim.summarization.summarizer import summarize
 # 기사 읽기
 workDir = os.path.abspath('./news/')
 filename_list = []
@@ -37,21 +38,22 @@ j = 0
 for content in contents:
         try:
             # 기사내용 요약
+            # print("content:",content[2])
             textrank = tr.TextRank(content[2])
-            summ = textrank.summarize(3)
+            summ = textrank.summarize(1)
             summ = "\n".join(summ)
-            # print("summarize:", summ)
             kkma = Kkma()
-            keylist = kkma.nouns(summ)
+
             tsumm = []
             tsumm.append(content[0])
             tsumm.append(summ)
             summarize_news.append(tsumm)
-
+            
+            
             # 요약본에서 키워드 추출
-            #summ_keywords = tr.TextRank(summ)
-            #keywords = summ_keywords.keywords()
-            keywords = keydict.isit_item(keylist)
+            summ_keywords = tr.TextRank(summ)
+            keywords = summ_keywords.keywords()
+            keywords = keydict.isit_item(keywords)
             for keyword in keywords:
                 if not keyword in keywords_list:
                      keywords_list.append(keyword)
@@ -73,11 +75,13 @@ for content in contents:
             # print("#", content[0])
             # print(keywords)
             # print()
+            
         except:
             # 요약, 키워드 추출이 안되는 기사
             j += 1
             print("###ERROR ARTICLE###")
-            print(content[0])
+            print("except :",content[2])
+            # print(content[0])
 
 
 keyword_rank = [] #[keywords][count]
