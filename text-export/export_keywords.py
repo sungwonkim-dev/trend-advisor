@@ -72,16 +72,12 @@ for content in contents:
             j += 1
             if j > 200:
                 break
-            # print("#", content[0])
-            # print(keywords)
-            # print()
             
         except:
             # 요약, 키워드 추출이 안되는 기사
             j += 1
             print("###ERROR ARTICLE###")
-            print("except :",content[2])
-            # print(content[0])
+            print("except :",content[0])
 
 
 keyword_rank = [] #[keywords][count]
