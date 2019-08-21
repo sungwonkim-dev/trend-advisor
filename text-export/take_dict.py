@@ -5,7 +5,7 @@ class noun_dictation():
         try:
             self.pronoun = pd.read_csv(file_path + "proper-noun.csv", header=None, encoding="cp949")
             self.brand = pd.read_csv(file_path + "brand.csv", header=None, encoding="cp949")
-            self.product = pd.read_csv(file_path+"product-name.csv", header=None, encoding="cp949")
+            self.product = pd.read_csv(file_path+"products.csv", header=None, encoding="utf-8")
             self.search = pd.read_csv(file_path+"dataset_all.csv", header=None, encoding="cp949")
             print("successfully imported csv file")
         except:
@@ -49,5 +49,4 @@ class noun_dictation():
 if __name__ == "__main__":
     filepath = "./dict/"
     nd = noun_dictation(filepath)
-    print(nd)
-    print(nd.isit_item(['울랄라세션', '삼성', '구글', '장갑', '반도체']))
+    print(nd.take_product_noun()[0])

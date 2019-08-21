@@ -3,9 +3,9 @@ import re
 import os
 import text_rank as tr
 import take_dict as td
-from konlpy.tag import Okt, Kkma
+from konlpy.tag import Okt, Kkma, Komoran
 from collections import Counter
-from gensim.summarization.summarizer import summarize
+
 # 기사 읽기
 workDir = os.path.abspath('./news/')
 filename_list = []
@@ -32,17 +32,19 @@ cnt_key = dict()
 summarize_news = [] # [id][summarize contents]
 keywords_list = []
 
+komoran = Komoran()
+
 filepath = './dict/'
 keydict = td.noun_dictation(filepath)
 j = 0
 for content in contents:
-        try:
+        #try:
             # 기사내용 요약
             # print("content:",content[2])
             textrank = tr.TextRank(content[2])
             summ = textrank.summarize(1)
             summ = "\n".join(summ)
-            kkma = Kkma()
+            komoran 
 
             tsumm = []
             tsumm.append(content[0])
@@ -73,7 +75,7 @@ for content in contents:
             if j > 200:
                 break
             
-        except:
+        #except:
             # 요약, 키워드 추출이 안되는 기사
             j += 1
             print("###ERROR ARTICLE###")
