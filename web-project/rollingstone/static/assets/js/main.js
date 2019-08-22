@@ -5,6 +5,16 @@ $(window).scroll(function () {
 });
 
 
+$(function(){
+    console.log("datepicker");
+    $("#search-date").datepicker({
+        showOn: "both",
+        buttonImage: "images/calender.gif",
+        buttonImageOnl:true,
+        buttonText:"Select date"
+    });
+});
+
 // 버튼 클릭시 화면 이동
 function homeMove() {
     var offset = $("#home").offset();
