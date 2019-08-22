@@ -43,8 +43,9 @@
                         <p style="font-family: '나눔스퀘어'">아이템과 날짜를 입력하세요</p>
                     </div>
                     <!-- Search form -->
-                    <form role="form" id="form-buscar">
+                    <form method="POST" action="/keyword" role="form" id="form-buscar">
                         <div class="form-group">
+                            {% csrf_token %}
                             <div class="input-group md-form">
                                 <span class="input-group-btn">
                                     <button class="btn btn-success" type="date"
@@ -53,7 +54,7 @@
                                     </button>
                                 </span>
                                 <div class="main-search">
-                                    <input id="1" class="form-control input-lg" type="text" name="search"
+                                    <input id="1" class="form-control input-lg" type="text" name="keyword"
                                         placeholder="Search..." required />
                                 </div>
                                 <span class="input-group-btn">
@@ -74,7 +75,8 @@
         <div class="container">
             <div class="final-area">
                 <h1>도움말</h1>
-                <p> 검색하면 그래프가 나오거나 키워드가 뿌려짐 </p>
+                <p> 안녕하세요 굴러들어온 돌 입니다.<br>향후 3주의 아이템 트랜드를 예측해주는 플랫폼입니다.<br>
+                어디까지나 프로그램의 예상되는 결과 예측치이므로 아이템에 관한 사용자 분들의 손실에 대해서 일체 책임지지않음을 알려드립니다. </p>
             </div>
         </div>
     </div>

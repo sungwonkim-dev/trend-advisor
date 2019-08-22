@@ -1,8 +1,9 @@
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from .forms import SearchForm
 
 class GraphView(View):
     def get(self, request, *args, **kwargs):
@@ -13,7 +14,14 @@ def index(request):
     return render(request, 'businesstiming/index.html')        
 
 def keyword(request):
-    return render(request, 'businesstiming/keyword.html')
+    if request.method == "POST":
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            keyword = form["keyword"]
+            print(keyword)
+            return render(request, 'businesstiming/keyword.html', {keyword: keyword})
+    else:
+        return render(request, 'businesstiming/keyword.html')
 
 def graph(request):
     return render(request, 'businesstiming/graph.html')
@@ -37,3 +45,5 @@ class ChartData(APIView):
             "second_data":[88,77,66,33,44,55,11,22,99,48]
         }   
         return Response(data)
+    
+

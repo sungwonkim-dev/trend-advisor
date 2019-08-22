@@ -30,37 +30,41 @@
     <div class="container-fluid" style="background: white">
         <div class="container">
             <div class="first-area key-word-area" id="search">
-                <h1>키워드 뿌려주는 곳</h1>
-                <p>추천 키워드입니다.</p>
-                <button type="button" class="btn btn-primary" onclick="recommendationMove()">가정용품<span
+                <h1>상품 키워드</h1>
+                <p>온라인 스토어 운영에 도움이 될만한 키워드입니다.</p>
+                <p>파란색 키워드는 향후 트랜드 가능성이 있는 아이템입니다.</p>
+                <p>붉은색 키워드는 향후 트랜드 가능성이 낮은 아이템입니다.</p>
+                <p>아이템을 클릭하면 해당 아이템의 그래프를 볼 수 있습니다.</p>
+                <button type="button" class="btn btn-primary" onclick="recommendationMove()">자전거<span
                         class="badge">0</span></button>
-                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
-                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
-                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
-                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
-                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
-                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
-                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
-                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
-                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
-                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
-                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
-                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
-                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
-                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
-                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
-                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
-                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
-                <button type="button" class="btn btn-primary">가정용품<span class="badge">0</span></button>
-                <button type="button" class="btn btn-primary">주방용품<span class="badge">1</span></button>
-                <button type="button" class="btn btn-primary">생활용품<span class="badge">2</span></button>
-                <button type="button" class="btn btn-primary">야야용품<span class="badge">3</span></button>
-                <button type="button" class="btn btn-primary">구구용품<span class="badge">4</span></button>
-                <button type="button" class="btn btn-primary">축축용품<span class="badge">5</span></button>
+                <button type="button" class="btn btn-danger">반바지<span class="badge">0</span></button>
+                <button type="button" class="btn btn-danger">{{ keyword }}<span class="badge">0</span></button>
             </div>
         </div>
     </div>
-    
+    <div class="container-fluid" style="background: white" id="recommendation">
+        <div class="container">
+            <div class="first-area">
+                <h1> 그래프 </h1>
+                <p>당신이 검색한 상품 혹은 대체가능한 상품이 나옵니다.</p>
+
+                <div class="col-lg-6" style="width:60%; float:none; margin:auto">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="1" class="form-control" type="text" name="search" placeholder="Search..."
+                                required style="z-index:0"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="submit">
+                                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <canvas id="graph" width="550" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
     <footer>
         <div class="footer">
             <div class="container-fluid">
@@ -80,6 +84,6 @@
 <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
 <script src="{% static 'assets/js/Chart.min.js' %}"></script>
 <script src="{% static 'assets/js/main.js'%}"></script>
-
+<script src="{% static 'assets/js/main-chart.js'%}"></script>
 
 </html>
