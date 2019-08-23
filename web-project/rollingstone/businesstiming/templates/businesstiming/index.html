@@ -32,7 +32,7 @@
     
     <div id="myVideo">
         <video width="100%" height="100%" autoplay muted loop>
-            <source src="{% static 'assets/videos/backvideo.mp4'%}" type="video/mp4">
+            <source src="{% static 'assets/videos/backvideo2.mp4'%}" type="video/mp4">
         </video>
     </div>
     <div class="first-area" id="home">
@@ -41,19 +41,13 @@
                 <div class="row">
                     <div id="logo" class="text-center" style="padding-top:15%;">
                         <img src="{% static 'assets/images/title.png'%}" style="width:70%; height:auto;" alt="이미지를 요청하지 못하였습니다.">
-                        <p style="font-family: '나눔스퀘어'">아이템과 날짜를 입력하세요</p>
+                        <p style="color:white">아이템을 입력하세요</p>
                     </div>
                     <!-- Search form -->
                     <form method="POST" action="/keyword" role="form" id="form-buscar">
                         <div class="form-group">
                             {% csrf_token %}
                             <div class="input-group md-form">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success" type="date" id="search-date"
-                                        style="background: transparent; border:none; color:rgb(88, 145, 81);">
-                                        <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
-                                    </button>
-                                </span>
                                 <div class="main-search">
                                     <input id="1" class="form-control input-lg" type="text" name="keyword"
                                         placeholder="Search..." required />

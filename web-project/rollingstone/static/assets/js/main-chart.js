@@ -29,6 +29,15 @@ function setChart() {
                 borderColor: "rgba(151,187,205,1)",
                 data: defaultData,
             }]
+        },
+        scales:{
+            yAxes:[{
+                ticks:{
+                    reverse:true,
+                    min:1,
+                    max:100,
+                }
+            }]
         }
     });
 }

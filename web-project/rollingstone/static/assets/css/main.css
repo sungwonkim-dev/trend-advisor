@@ -5,12 +5,12 @@
      background:transparent;
 }
 .navbar-default.scrolled{
-     background:rgba(79, 180, 65, 0.603);
+     background:rgba(22, 22, 22, 0.603);
      border:none;
 }
 .navbar-fixed-top{
     overflow:hidden;
-    background: rgb(80, 150, 84);
+    background: rgb(20, 20, 20);
     border:none;
 }
 .navbar-header{

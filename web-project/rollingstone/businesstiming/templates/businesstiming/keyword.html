@@ -35,8 +35,9 @@
                 <p>파란색 키워드는 향후 트랜드 가능성이 있는 아이템입니다.</p>
                 <p>붉은색 키워드는 향후 트랜드 가능성이 낮은 아이템입니다.</p>
                 <p>아이템을 클릭하면 해당 아이템의 그래프를 볼 수 있습니다.</p>
+                <p></p>
                 {% for k in key %}
-                <button type="button" class="btn btn-danger">{{ k }}<span class="badge">0</span></button>
+                <button type="button" class="btn btn-primary">{{ k }}<span class="badge">0</span></button>
                 {% endfor %}
                 {% csrf_token %}
             </div>
@@ -46,7 +47,7 @@
         <div class="container">
             <div class="first-area">
                 <h1> 그래프 </h1>
-                <p>당신이 검색한 상품 혹은 대체가능한 상품이 나옵니다.</p>
+                <p>당신이 검색한 상품의 트랜드 그래프입니다.</p>
 
                 <div class="col-lg-6" style="width:60%; float:none; margin:auto">
                     <div class="form-group">
