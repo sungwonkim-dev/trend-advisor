@@ -5,6 +5,7 @@
     <link href="{% static 'assets/css/bootstrap.min.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/main.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/Chart.min.css'%}" rel="stylesheet">
+    <link href="{% static 'assets/css/jquery-ui.min.css'%}" rel="stylesheet">
     <title>main screen</title>
 </head>
 
@@ -48,8 +49,8 @@
                             {% csrf_token %}
                             <div class="input-group md-form">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success" type="date"
-                                        style="background: transparent; border:none; color:gray;">
+                                    <button class="btn btn-success" type="date" id="search-date"
+                                        style="background: transparent; border:none; color:rgb(88, 145, 81);">
                                         <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
                                     </button>
                                 </span>
@@ -59,7 +60,7 @@
                                 </div>
                                 <span class="input-group-btn">
                                     <button class="btn btn-success" type="submit"
-                                        style="background: transparent; border:none; color:gray;">
+                                        style="background: transparent; border:none; color:rgb(88, 145, 81);">
                                         <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
                                     </button>
                                 </span>
@@ -75,8 +76,7 @@
         <div class="container">
             <div class="final-area">
                 <h1>도움말</h1>
-                <p> 안녕하세요 굴러들어온 돌 입니다.<br>향후 3주의 아이템 트랜드를 예측해주는 플랫폼입니다.<br>
-                어디까지나 프로그램의 예상되는 결과 예측치이므로 아이템에 관한 사용자 분들의 손실에 대해서 일체 책임지지않음을 알려드립니다. </p>
+                <p> 안녕하세요 굴러들어온 돌 입니다.<br> </p>
             </div>
         </div>
     </div>
@@ -99,6 +99,8 @@
 <script src="{% static 'assets/js/jquery-3.4.1.min.js'%}"></script>
 <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
 <script src="{% static 'assets/js/Chart.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery-ui.min.js'%}"></script>
+<script src="{% static 'assets/js/datepicker-ko.js'%}"></script>
 <script src="{% static 'assets/js/main.js'%}"></script>
 
 </html>

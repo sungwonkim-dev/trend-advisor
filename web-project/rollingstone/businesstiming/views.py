@@ -15,11 +15,17 @@ def index(request):
 
 def keyword(request):
     if request.method == "POST":
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            keyword = form["keyword"]
-            print(keyword)
-            return render(request, 'businesstiming/keyword.html', {keyword: keyword})
+        form = request.POST
+        if form:
+            keyword_list = []
+            for key in range(100):
+                key = request.POST['keyword']
+                keyword_list.append(key)
+            context = {
+                'key' : keyword_list, 
+                
+            }
+            return render(request, 'businesstiming/keyword.html', context)
     else:
         return render(request, 'businesstiming/keyword.html')
 
