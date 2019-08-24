@@ -3,17 +3,37 @@
 $(window).scroll(function () {
     $('nav').toggleClass('scrolled', $(this).scrollTop() > 50);
 });
-
-
-$(function(){
-    console.log("datepicker");
-    $("#search-date").datepicker({
-        showOn: "both",
-        buttonImage: "images/calender.gif",
-        buttonImageOnl:true,
-        buttonText:"Select date"
+var autocompleteList;
+$(document).ready(function () {
+    $.ajax({
+        method: 'GET',
+        url: '/api/autocomplete',
+        success: function (data) {
+            autocompleteList = data.autocompleteList;
+            $("#word-search").autocomplete({
+                source: function(request, response){
+                    var results = $.ui.autocomplete.filter(autocompleteList, request.term);
+                    response(results.slice(0, 10));
+                },
+                focus: function(event, ui){return false;}
+            });
+        },
+        error: function (data) {
+            console.log("Error");
+        }
     });
 });
+
+function submitSearch() {
+    searchWord = $('#word-search').val();
+    autolen = autocompleteList.length;
+    for (var i = 0; i < autolen; i++) {
+        if (searchWord == autocompleteList[i]) {
+            return true;
+        }
+    }
+    return false;
+}
 
 // 버튼 클릭시 화면 이동
 function homeMove() {

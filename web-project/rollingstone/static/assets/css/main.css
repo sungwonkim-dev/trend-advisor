@@ -38,13 +38,14 @@
 }
 
 .nav.navbar-nav li a{
-    color:black;
+    color:rgb(103, 153, 199);
 }
 .nav.navbar-nav li a:visited{
-    color:black;
+    color:rgb(33, 65, 70);
+    text-decoration: none;
 }
 .nav.navbar-nav li a:hover{
-    color:rgb(76, 235, 89);
+    color:rgb(31, 56, 80);
 }
 
 .search-area{
@@ -61,7 +62,7 @@
     border-radius: 0;
     border-bottom: 1px solid #000000;
     box-shadow: none;
-    color:white;
+    color:black;
     -webkit-box-shadow: none;
 }
 
@@ -69,6 +70,11 @@
 .main-search .form-control:focus{
     -webkit-box-shadow: none;
     box-shadow: none;
+}
+
+.main-search input[type="text"]::placeholder
+{
+    color:black;
 }
 
 /*원주 작업 부분*/

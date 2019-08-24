@@ -14,13 +14,12 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#" onclick="location.reload()">
-                        <img src="{% static 'assets/images/title.png'%}" alt="logo">
+                        <img src="{% static 'assets/images/logo.png'%}" alt="logo">
                     </a>
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/" onclick="location.href='/'">Home</a></li>
                     <li class="active"><a href="/keyword" id="searchBtn">키워드</a></li>
-                    <li><a href="/graph" id="chartBtn">그래프</a></li>
                 </ul>
             </div>
         </nav>
@@ -36,6 +35,7 @@
                 <p>붉은색 키워드는 향후 트랜드 가능성이 낮은 아이템입니다.</p>
                 <p>아이템을 클릭하면 해당 아이템의 그래프를 볼 수 있습니다.</p>
                 <p></p>
+                <input type="hidden" id="word" value="{{searchWord}}">
                 {% for k in key %}
                 <button type="button" class="btn btn-primary">{{ k }}<span class="badge">0</span></button>
                 {% endfor %}
@@ -49,8 +49,8 @@
                 <h1> 그래프 </h1>
                 <p>당신이 검색한 상품의 트랜드 그래프입니다.</p>
 
-                <div class="col-lg-6" style="width:60%; float:none; margin:auto">
-                    <div class="form-group">
+                <div class="col-lg-6" style="width:100%; height:30%;">
+                    <!--div class="form-group">
                         <div class="input-group">
                             <input id="1" class="form-control" type="text" name="search" placeholder="Search..."
                                 required style="z-index:0"/>
@@ -60,7 +60,7 @@
                                 </button>
                             </span>
                         </div>
-                    </div>
+                    </div-->
                     <canvas id="graph" width="550" height="400"></canvas>
                 </div>
             </div>
