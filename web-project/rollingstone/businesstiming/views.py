@@ -5,6 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .forms import SearchForm
 import datetime
+import json
+import os
 
 class GraphView(View):
     def get(self, request, *args, **kwargs):
@@ -46,6 +48,14 @@ class ChartData(APIView):
     authentication_classes = []
     permission_classes = []
     def get(self, request, format=None):
+        module_dir = os.path.dirname(__file__)
+        workDir = os.path.join(module_dir, 'naverdata')
+        filename_list = []
+        print(module_dir, workDir)
+        for dirpath, dirnames, filenames in os.walk(workDir):
+            for filename in filenames:
+                filename_list.append(filename)
+        print(filename_list)
         cal = datetime.datetime.now()
         labels = []
         cal = cal - datetime.timedelta(days=7*6)

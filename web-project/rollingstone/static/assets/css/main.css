@@ -5,12 +5,12 @@
      background:transparent;
 }
 .navbar-default.scrolled{
-     background:rgba(22, 22, 22, 0.603);
+     background:white;
      border:none;
 }
 .navbar-fixed-top{
     overflow:hidden;
-    background: rgb(20, 20, 20);
+    background: white;
     border:none;
 }
 .navbar-header{
@@ -25,22 +25,23 @@
 }
 
 .navbar-nav > .active > a{
-    background-color:rgb(39, 83, 41) !important;
+    background-color:rgb(126, 187, 216) !important;
+    color: rgb(76, 79, 235);
 }
 .navbar-nav > .active > a:hover{
-    color:rgb(76, 235, 89);
+    color:rgb(76, 79, 235);
 }
 
 
 .navbar-header a{
-    color:white;
+    color:black;
 }
 
 .nav.navbar-nav li a{
-    color:white;
+    color:black;
 }
 .nav.navbar-nav li a:visited{
-    color:white;
+    color:black;
 }
 .nav.navbar-nav li a:hover{
     color:rgb(76, 235, 89);
@@ -55,11 +56,12 @@
 
 .main-search input[type="text"],
 .main-search .form-control{
-    background: transparent;
+    background: white;
     border:none;
     border-radius: 0;
     border-bottom: 1px solid #000000;
     box-shadow: none;
+    color:white;
     -webkit-box-shadow: none;
 }
 
