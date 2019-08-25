@@ -33,7 +33,7 @@ def keyword(request):
             now = datetime.datetime(2019, 7, 30)
             ju = now.isocalendar()[1]
             searchWord = request.POST['keyword']
-            for key in range(1000):
+            for key in range(100):
                 key = request.POST['keyword']
                 keyword_list.append(key)
             context = {

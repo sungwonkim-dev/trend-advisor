@@ -1,13 +1,14 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <link href="{% static 'assets/css/bootstrap.min.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/main.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/Chart.min.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/jquery-ui.min.css'%}" rel="stylesheet">
-    <title>main screen</title>
+    <title>장사는 타이밍: 홈</title>
 </head>
 
 <body>
@@ -18,6 +19,7 @@
                     <a class="navbar-brand" href="#" onclick="location.reload()">
                         <img src="{% static 'assets/images/logo.png'%}" alt="logo">
                     </a>
+
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="/" onclick="location.href='/'">Home</a></li>
@@ -29,7 +31,7 @@
             </div>
         </nav>
     </header>
-    
+
     <div id="myVideo">
         <video width="100%" height="100%" autoplay muted loop>
             <source src="{% static 'assets/videos/backvideo2.mp4'%}" type="video/mp4">
@@ -40,8 +42,13 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="row">
                     <div id="logo" class="text-center" style="padding-top:15%;">
-                        <img src="{% static 'assets/images/title.png'%}" style="width:70%; height:auto;" alt="이미지를 요청하지 못하였습니다.">
-                        <p ><h4 style="color:rgb(255, 255, 255); text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">아이템을 입력하세요</h5></p>
+                        <img src="{% static 'assets/images/title.png'%}" style="width:70%; height:auto;"
+                            alt="이미지를 요청하지 못하였습니다.">
+                        <p>
+                            <h4
+                                style="color:rgb(255, 255, 255); text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+                                아이템을 입력하세요</h5>
+                        </p>
                     </div>
                     <!-- Search form -->
                     <form method="POST" action="/keyword" role="form" id="form-buscar" onsubmit="return submitSearch()">
@@ -65,23 +72,13 @@
             </div>
         </div>
     </div>
-    
-    <div class="container-fluid" style="background: white" id="help">
-        <div class="container">
-            <div class="final-area">
-                <h1>도움말</h1>
-                <p> 안녕하세요 굴러들어온 돌 입니다.<br> </p>
-            </div>
-        </div>
-    </div>
+
     <footer>
         <div class="footer">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-5"></div>
-                    <div class="col-md-2">
-                        <p style="color:gray">web develop by rolling stone</p>
-                    </div>
+                    <p>Copyright Rolling Rocks. All Rights Reserved.</p>
                     <div class="col-md-6"></div>
                 </div>
             </div>
