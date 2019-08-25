@@ -33,7 +33,7 @@ def keyword(request):
             now = datetime.datetime(2019, 7, 30)
             ju = now.isocalendar()[1]
             searchWord = request.POST['keyword']
-            for key in range(100):
+            for key in range(1000):
                 key = request.POST['keyword']
                 keyword_list.append(key)
             context = {
@@ -81,9 +81,12 @@ class ChartData(APIView):
                 openfile = pd.read_csv(workDir + '/' + filename, encoding="cp949")
                 if word in openfile["item"].values:
                     key_data = openfile[openfile["item"] == word]["rank"].values[0]
-                    first_data.append(key_data)
+                    if key_data <= 200:
+                        first_data.append(key_data)
+                    else:
+                        first_data.append(200)
                 else:
-                    first_data.append(500)
+                    first_data.append(200)
 
         
         # 그래프에 쓸 x축 라벨 만들기
@@ -108,7 +111,7 @@ class ChartData(APIView):
         data = {
             "labels" : labels,
             "first_data" : first_data,
-            "second_data":[88,77,66,33,44,55,11,22,99,48]
+            "word" : word,
         }   
         return Response(data)
     

@@ -22,10 +22,35 @@
                     <li class="active"><a href="/keyword" id="searchBtn">키워드</a></li>
                 </ul>
             </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="myBar"></div>
+            </div>
         </nav>
     </header>
 
-    
+    <div class="container-fluid" style="background: white" id="keyword-graph">
+        <div class="container">
+            <div class="first-area">
+                <h1> 그래프 </h1>
+                <p>당신이 검색한 상품의 트랜드 그래프입니다.</p>
+
+                <div class="col-lg-6" style="width:60%; margin:auto; float:none;">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input id="1" class="form-control" type="text" name="search" placeholder="Search..."
+                                required style="z-index:0"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <canvas id="graph" width="550" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid" style="background: white">
         <div class="container">
             <div class="first-area key-word-area" id="search">
@@ -36,36 +61,16 @@
                 <p>아이템을 클릭하면 해당 아이템의 그래프를 볼 수 있습니다.</p>
                 <p></p>
                 <input type="hidden" id="word" value="{{searchWord}}">
+                <div class="btn-group">
                 {% for k in key %}
-                <button type="button" class="btn btn-primary">{{ k }}<span class="badge">0</span></button>
+                <button type="button" class="mb-0 btn btn-primary" name="{{k}}" onclick="keywordData(this)">{{ k }}</button>
                 {% endfor %}
+                </div>
                 {% csrf_token %}
             </div>
         </div>
     </div>
-    <div class="container-fluid" style="background: white" id="recommendation">
-        <div class="container">
-            <div class="first-area">
-                <h1> 그래프 </h1>
-                <p>당신이 검색한 상품의 트랜드 그래프입니다.</p>
-
-                <div class="col-lg-6" style="width:100%; height:30%;">
-                    <!--div class="form-group">
-                        <div class="input-group">
-                            <input id="1" class="form-control" type="text" name="search" placeholder="Search..."
-                                required style="z-index:0"/>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" type="submit">
-                                    <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
-                                </button>
-                            </span>
-                        </div>
-                    </div-->
-                    <canvas id="graph" width="550" height="400"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <footer>
         <div class="footer">
             <div class="container-fluid">

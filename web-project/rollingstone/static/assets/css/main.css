@@ -92,7 +92,7 @@
     top: 0;
     z-index: 100;
     width: 100%;
-    background-color: rgb(80, 150, 84);
+    background-color: rgb(136, 136, 136);
 }
 
 .progress-container {
@@ -104,21 +104,22 @@
 
 .progress-bar {
     height: 8px;
-    background: rgb(80, 150, 84);
+    background: rgb(134, 134, 134);
     width: 0%;
 }
 
 /* 레이아웃 */
 .first-area{
     padding-top:10%;
-    padding-bottom:15%;
-    min-height:100vh;
+    padding-bottom:10%;
+    min-height:80vh;
 }
 .footer{
     background:black;
     color:white;
     padding-top :2%;
     padding-bottom:2%;
+    height:auto;
 }
 
 /* 키워드 */
@@ -126,4 +127,16 @@
 .key-word-area button
 {
     margin:3px;
+}
+
+.btn
+{
+    margin-right:0;
+    padding:10px 15px;
+}
+
+.btn.btn-primary
+{
+    background-color:rgb(126, 176, 255);
+    border-color:rgb(194, 194, 194);
 }

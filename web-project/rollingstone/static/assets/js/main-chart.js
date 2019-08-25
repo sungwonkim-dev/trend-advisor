@@ -1,6 +1,28 @@
 
 var defaultData = [];
 var labels = [];
+var labelname;
+
+
+function keywordData(data)
+{
+    var data = {"word":data.name};
+    $.ajax({
+        method:'GET',
+        url: '/api/chart/data',
+        data:data,
+        success: function(data){
+            defaultData = data.first_data;
+            labels = data.labels;
+            setChart();
+            var offset = $('#keyword-graph').offset();
+            $('html, body').animate({scrollTop:offset.top}, 1000);
+        },
+        error: function(data){
+            console.log("Error");
+        }
+    })
+}
 
 $(document).ready(function(){
     var data = {"word":document.getElementById("word").value};
@@ -11,6 +33,7 @@ $(document).ready(function(){
         success: function (data) {
             defaultData = data.first_data;
             labels = data.labels;
+            labelname = data.word;
             setChart();
         },
         error: function (data) {
@@ -29,7 +52,7 @@ function setChart() {
             labels: labels,
             datasets: [{
                 label: '# of Votes',
-                label: "검색 데이터",
+                label: labelname,
                 fill: "start",
                 backgroundColor: "rgba(220,220,220,0.2)",
                 pointBackgroundColor: "rgba(151,187,205,1)",
@@ -43,7 +66,7 @@ function setChart() {
                     ticks:{
                         reverse:true,
                         min:1,
-                        max:500,
+                        max:200,
                     }
                 }]
             }
