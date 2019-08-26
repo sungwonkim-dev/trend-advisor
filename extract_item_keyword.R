@@ -4,16 +4,20 @@ library(rJava)
 library(jsonlite)
 library(data.table)
 library(stringr)
-library(Rtextrankr)
 library(dplyr)
+library(tidyr)
 
+rm(list = ls()); gc(reset = T)
 
-Article_Keywords_Extraction <- function(directory_day = 12){
+Article_Keywords_Extraction <- function(input_month, input_week){
   
   # 파일경로 설정
-  day <- directory_day
+  month <- input_month
+  if(length(month) == 1)
+    month <- paste0("0", month)
+  week <- input_week
   part_paths <- "article/"
-  paths <- paste0(part_paths, day, "/")
+  paths <- paste0(part_paths, "2018/", month, "/", week, "/")
   json_files <- list.files(paths)
   
   # 기사 변수
@@ -26,8 +30,21 @@ Article_Keywords_Extraction <- function(directory_day = 12){
   for(i in 1 : length(json_files)){
     
     # json 형식으로 저장된 기사 내용 추출
-    json <- fromJSON(paste0(paths, json_files[i]))
+    read_error <- tryCatch(
+      json <- jsonlite::fromJSON(paste0(paths, json_files[i])),
+      error = function(e){
+        NULL
+        print(e)
+      },
+      finally = NULL
+    )
+    
+    if(is.null(read_error))
+      next
+    
+    # id <- json$detail["NEWS_ID"]
     id <- json$detail$NEWS_ID
+    # content <- json$detail["CONTENT"]
     content <- json$detail$CONTENT
     
     # 문자 제거
@@ -48,7 +65,25 @@ Article_Keywords_Extraction <- function(directory_day = 12){
     #   next
     # sentence <- gsub(" ", "", paste(top_2_summarization[1], top_2_summarization[2]))
     
-    articles <- bind_rows(articles, data.frame(article_id = id, before_parsing_content = pre_content, stringsAsFactors = F))
+    #sentimentclass
+    #한개의 기사 내의 P의 비율이 0.58보다 높으면 P판정
+    # sentiment <- json$detail["TMS_SENTIMENT_CLASS"]
+    sentiment <- json$detail$TMS_SENTIMENT_CLASS
+    
+    if(sentiment=="NEUTRAL"){sentimentNP <- 0}
+    else if(sentiment==""){sentimentNP <- NA}
+    else{
+      t <- str_split(sentiment,"<br/>")
+      t <- as.data.frame(t)
+      t <- separate(t, colnames(t[1]), c("A", "B"), sep = " ")
+      n <- nrow(t %>% dplyr::filter(A=="NEGATIVE"))
+      p <- nrow(t %>% dplyr::filter(A=="POSITIVE"))
+      if(p/(n+p)>=0.58){sentimentNP <- 1}
+      else{sentimentNP <- -1}
+    }
+    
+    articles <- bind_rows(articles, data.frame(before_parsing_content = pre_content, 
+                                               NP = sentimentNP, stringsAsFactors = F))
     
     print(paste0("article preprocessing : ", i, " / ", length(json_files)))
   }
@@ -72,36 +107,38 @@ Article_Keywords_Extraction <- function(directory_day = 12){
   keywords_list <- parser %>% str_split(pattern = " ")
   
   keywords <- c()
-
-  for(i in 1 : length(json_files)){
+  for(i in 1 : dim(articles)[1]){
     keywords <- c(keywords, list(keywords_list[[i]][which(keywords_list[[i]] %in% items)]))
     
-    print(paste0("item keyword : ", i, " / ", length(json_files)))
+    print(paste0("item keyword : ", i, " / ", dim(articles)[1]))
   }
   
   # 기사 아이디와 키워드 데이터 프레임 생성
   result_part <- data.frame()
-  for(i in 1 : length(json_files)){
+  for(i in 1 : dim(articles)[1]){
     result_part <- bind_rows(result_part, 
-                             data.frame(article_id = rep(articles$article_id[i], length(keywords[[i]])), 
-                                        keyword = keywords[[i]]))
+                             data.frame(keyword = keywords[[i]], 
+                                        NP = rep(articles$NP[i], length(keywords[[i]]))))
     
-    print(paste0("item dataframe : ", i, " / ", length(json_files)))
+    print(paste0("item dataframe : ", i, " / ", dim(articles)[1]))
   }
   
+  result_part <- result_part %>% filter(!is.na(NP))
+  
   # 키워드 갯수 생성 및 키워드 별 랭크 생성, count 제거 및 열 위치 변경
-  result_part2 <- result_part %>% group_by(keyword) %>% 
-    summarise(count = n()) %>% arrange(desc(count)) %>% mutate(rank = rank(desc(count), ties.method = "random"))
+  result_part2 <- result_part %>% 
+    group_by(keyword) %>% 
+    summarise(count = n(), npscore = sum(NP)) %>% 
+    arrange(desc(count)) %>% filter(npscore > 0) %>% mutate(rank = rank(desc(count), ties.method = "random"))
+  
   result_part2$count <- NULL
-  result_part2 <- result_part2[, c(2, 1)]
+  result_part2 <- result_part2[, c(3, 1, 2)]
   
-  # 중복 제거 후 키워드 정보와 병합
-  result_part <- result_part %>% distinct()
-  result <- merge(result_part2, result_part, by = "keyword", all.y =  T)
-  result <- result %>% arrange(rank)
+  fwrite(result_part2, paste0("article_result_", month, week, ".csv"), col.names = T, row.names = F)
   
-  fwrite(result, "article_result.csv", col.names = T, row.names = F)
   print("Complete!")
 }
 
-
+for(i in 2 : 4){
+  Article_Keywords_Extraction(6, i)
+}
