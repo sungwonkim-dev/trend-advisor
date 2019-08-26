@@ -48,13 +48,6 @@ def keyword(request):
 def graph(request):
     return render(request, 'businesstiming/graph.html')
 
-def get_data(request):
-    data = {
-        "first_data":[31,26,32,14,76,34,56,22,33,44],
-        "second_data":[88,77,66,33,44,55,11,22,99,48]
-    }
-    return JsonResponse(data)
-
 class ChartData(APIView):
 
     def get(self, request, format=None):
@@ -68,7 +61,7 @@ class ChartData(APIView):
                 filename_list.append(filename)
 
         # 6주전 주차로 초기화
-        cal = datetime.datetime.now()
+        cal = datetime.date(2018,8,28)
         cal = cal - datetime.timedelta(days=7*6)
         iso = cal.isocalendar()[1]
         # 이전 검색 순위 찾기

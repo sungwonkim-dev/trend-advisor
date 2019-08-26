@@ -12,10 +12,12 @@ dependencies:
   - libcblas=3.8.0=12_mkl
   - liblapack=3.8.0=12_mkl
   - mkl=2019.4=245
+  - mysql-connector-c=6.1.11=he025d50_1002
+  - mysqlclient=1.3.14=py37he774522_0
   - numpy=1.17.0=py37hc71023c_0
   - openssl=1.1.1c=hfa6e2cd_0
   - pandas=0.25.1=py37he350917_0
-  - pip=19.2.2=py37_0
+  - pip=19.2.3=py37_0
   - python=3.7.3=h510b542_1
   - python-dateutil=2.8.0=py_0
   - pytz=2019.2=py_0
