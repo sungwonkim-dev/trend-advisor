@@ -7,7 +7,8 @@ from .forms import SearchForm
 import datetime
 import pandas as pd
 import os
-
+import random
+import MySQLdb as mysql
 
 # Create your views here.
 def index(request):
@@ -26,24 +27,39 @@ class AutocompleteData(APIView):
         return Response(data)
 
 def keyword(request):
+    key_list = []
+    context = {}
     if request.method == "POST":
-        form = request.POST
-        if form:
-            keyword_list = []
-            now = datetime.datetime(2019, 7, 30)
-            ju = now.isocalendar()[1]
-            searchWord = request.POST['keyword']
-            for key in range(100):
-                key = request.POST['keyword']
-                keyword_list.append(key)
+        weekday = request.POST['keyword']
+        year = int(weekday[:4])
+        w = int(weekday[6:])
+        print(year, w)
+        cal = datetime.date(2018,6,4)
+        try:
+            con = mysql.connect(host = 'camel.cy5ept1oyktw.ap-northeast-2.rds.amazonaws.com',
+            user = 'camel',
+            passwd = 'mypassword',
+            db = 'trend',
+            charset='utf8',
+            use_unicode=True
+            )
+            cur = con.cursor()
+            
+            cur.execute("SELECT rank, keyword FROM keywords")
+            data_list = cur.fetchall()
+            for key in data_list:
+                if key[0] <= 20:
+                    key_list.append(key[1])
             context = {
-                'searchWord' : searchWord,
-                'key' : keyword_list, 
-                'ju' : ju%5
+                "key": key_list,
             }
-            return render(request, 'businesstiming/keyword.html', context)
+            con.close()
+            random.shuffle(key_list)
+        except mysql.Error:
+            print(mysql.Error)
+        return render(request, 'businesstiming/keyword.html', context)
     else:
-        return render(request, 'businesstiming/keyword.html')
+        return render(request, 'businesstiming/keyword.html', context)
 
 def graph(request):
     return render(request, 'businesstiming/graph.html')
@@ -61,11 +77,12 @@ class ChartData(APIView):
                 filename_list.append(filename)
 
         # 6주전 주차로 초기화
-        cal = datetime.date(2018,8,28)
+        cal = datetime.date(2018,6,4)
         cal = cal - datetime.timedelta(days=7*6)
         iso = cal.isocalendar()[1]
         # 이전 검색 순위 찾기
         word = request.GET["word"]
+        print("word:",word)
         first_data = []
         for filename in filename_list:
             # 주 구하기 (파일명은 yyyymmdd.csv 이어야 합니다.)
@@ -80,22 +97,33 @@ class ChartData(APIView):
                         first_data.append(200)
                 else:
                     first_data.append(200)
-
+        try:
+            con = mysql.connect(host = 'camel.cy5ept1oyktw.ap-northeast-2.rds.amazonaws.com',
+            user = 'camel',
+            passwd = 'mypassword',
+            db = 'trend',
+            charset='utf8',
+            use_unicode=True)
+            cur = con.cursor()
+            cur.execute("SELECT rank FROM keywords WHERE keyword = '" + word + "'")
+            data_list = cur.fetchall()
+            for ran in data_list:
+                print(ran)
+                first_data.append(ran[0])
+            con.close()
+        except mysql.Error:
+            print(mysql.Error)
         
         # 그래프에 쓸 x축 라벨 만들기
         labels = []
         for i in range(6):
-            ju = cal.isocalendar()[1] % 5
-            if ju == 0:
-                ju = 4
-            lbstr = str(cal.month) + "월" + str(ju) + "주"
+            ju = cal.isocalendar()[1]
+            lbstr = str(ju) + "주"
             cal = cal + datetime.timedelta(days=7)
             labels.append(lbstr)
         cal = cal + datetime.timedelta(days=7*3)
-        ju = cal.isocalendar()[1] % 5
-        if ju == 0:
-            ju = 4
-        lbstr = str(cal.month) + "월" + str(ju) + "주"
+        ju = cal.isocalendar()[1]
+        lbstr = str(ju) + "주"
         labels.append(lbstr)
         
 

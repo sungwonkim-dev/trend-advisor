@@ -1,9 +1,6 @@
 
 body{
-    font-family: "glyphicons-halflings-regular";
-    src: url('../fonts/glyphicons-halflings-regular.eot') format('eot'),
-    url('../fonts/glyphicons-halflings-regular.ttf') format('ttf'),
-    url('../fonts/glyphicons-halflings-regular.woff') format('woff');
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .navbar-default{
@@ -71,7 +68,7 @@ body{
     background-color: black;
 }
 
-
+.main-search input[type="calendar"],
 .main-search input[type="text"],
 .main-search .form-control{
     background: white;
@@ -131,7 +128,11 @@ body{
     padding-bottom:10%;
     min-height:120vh;
 }
+footer{
+    width:100%;
+}
 .footer{
+    width:100%;
     border-top:gray 1px solid;
     background:white;
     color:black;
@@ -145,6 +146,21 @@ body{
 .desc{
     text-align:center;
 }
+
+.desc .title{
+    display:inline-block;
+    padding-top:1%;
+    padding-bottom:2%;
+    padding-left:2%;
+    padding-right:2%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.desc .content{
+    padding:5%;
+}
+
 
 .key-word-area
 .key-word-area button
@@ -163,3 +179,69 @@ body{
     background-color:rgb(126, 176, 255);
     border-color:rgb(194, 194, 194);
 }
+
+
+.datepicker-days > table > tbody > tr:hover{
+    background-color: #808080;
+}
+
+.top-buffer{
+    margin-top:2%;
+    height:100px;
+}
+
+.button-area{
+    padding-left:15%;
+    padding-right:15%;
+}
+
+.square_btn{
+    left:50%;
+    transform:translateX(-50%);
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space: nowrap;
+    width:100%;
+    height:100%;
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    font-size:3vh;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border : 3px solid black;
+    color: black;
+    background: transparent;
+    transition: .4s;
+}
+
+.square_btn:hover {
+    background: #523939;
+    color: rgb(231, 231, 231);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
