@@ -76,16 +76,20 @@ Article_Keywords_Extraction <- function(input_month, input_week){
       t <- str_split(sentiment,"<br/>")
       t <- as.data.frame(t)
       t <- separate(t, colnames(t[1]), c("A", "B"), sep = " ")
+      
       n <- nrow(t %>% dplyr::filter(A=="NEGATIVE"))
       p <- nrow(t %>% dplyr::filter(A=="POSITIVE"))
-      if(p/(n+p)>=0.58){sentimentNP <- 1}
-      else{sentimentNP <- -1}
+      
+      if(p / (n + p) <= 0.48){ sentimentNP <- -1 }
+      else if(p / (n + p) <= 0.60){ sentimentNP <- 0 }
+      else{ sentimentNP <- 1 }
     }
     
     articles <- bind_rows(articles, data.frame(before_parsing_content = pre_content, 
                                                NP = sentimentNP, stringsAsFactors = F))
     
-    print(paste0("article preprocessing : ", i, " / ", length(json_files)))
+    if(i %% 1000 == 0)
+      print(paste0("article preprocessing : ", i, " / ", length(json_files)))
   }
   
   # # 기사 내용을 바탕으로 요약 문장 생성 (1)
@@ -110,7 +114,8 @@ Article_Keywords_Extraction <- function(input_month, input_week){
   for(i in 1 : dim(articles)[1]){
     keywords <- c(keywords, list(keywords_list[[i]][which(keywords_list[[i]] %in% items)]))
     
-    print(paste0("item keyword : ", i, " / ", dim(articles)[1]))
+    if(i %% 1000 == 0)
+      print(paste0("item keyword : ", i, " / ", dim(articles)[1]))
   }
   
   # 기사 아이디와 키워드 데이터 프레임 생성
@@ -120,7 +125,8 @@ Article_Keywords_Extraction <- function(input_month, input_week){
                              data.frame(keyword = keywords[[i]], 
                                         NP = rep(articles$NP[i], length(keywords[[i]]))))
     
-    print(paste0("item dataframe : ", i, " / ", dim(articles)[1]))
+    if(i %% 1000 == 0)
+      print(paste0("item dataframe : ", i, " / ", dim(articles)[1]))
   }
   
   result_part <- result_part %>% filter(!is.na(NP))
@@ -131,14 +137,11 @@ Article_Keywords_Extraction <- function(input_month, input_week){
     summarise(count = n(), npscore = sum(NP)) %>% 
     arrange(desc(count)) %>% filter(npscore > 0) %>% mutate(rank = rank(desc(count), ties.method = "random"))
   
-  result_part2$count <- NULL
-  result_part2 <- result_part2[, c(3, 1, 2)]
-  
   fwrite(result_part2, paste0("article_result_", month, week, ".csv"), col.names = T, row.names = F)
   
   print("Complete!")
 }
 
-for(i in 2 : 4){
+for(i in 1 : 4){
   Article_Keywords_Extraction(6, i)
 }
