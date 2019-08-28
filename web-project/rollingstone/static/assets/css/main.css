@@ -245,3 +245,9 @@ footer{
   .tooltip:hover .tooltiptext {
     visibility: visible;
   }
+
+.graphpop{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}

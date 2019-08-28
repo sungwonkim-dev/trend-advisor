@@ -46,18 +46,15 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="word" value="{{searchWord}}">
+                <input type="hidden" id="week" value="{{weekday}}">
 
                 <div class="row">
                     <div class="button-area">
                         {% if key is not none %}
                         {% for k in key %}
                         <div class="col-sm-3 col-md-3 col-xs-3 top-buffer">
-                            
-                            <button type="button" class="btn square_btn" name="{{k}}" title="{{k}}" data-toggle="tooltip"
-                                onclick="keywordData(this)">{{ k }}</button>
-                                
-                            
+                            <button type="button" class="btn square_btn" name="{{k}}" title="{{k}}"
+                                data-toggle="tooltip" onclick="keywordData(this)">{{ k }}</button>
                         </div>
                         {% endfor %}
                         {% else %}
@@ -84,15 +81,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6" style="width:60%; margin:auto; float:none;">
-                    <form method="POST" action="/keyword" role="form" id="form-buscar">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <div class="input-group">
-
-                            </div>
-                        </div>
-                    </form>
                     <canvas id="graph" width="550" height="400"></canvas>
+                </div>
+                <div class="graphpop">
+                    <input id="pop" type="button" class="btn btn-sm" value="데이터 제거">
                 </div>
             </div>
         </div>

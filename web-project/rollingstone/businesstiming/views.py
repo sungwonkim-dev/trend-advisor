@@ -14,27 +14,13 @@ import MySQLdb as mysql
 def index(request):
     return render(request, 'businesstiming/index.html')        
 
-class AutocompleteData(APIView):
-    def get(self, request, format=None):
-        module_dir = os.path.dirname(__file__)
-        workDir = os.path.join(module_dir, 'src\\ranking')
-        df = pd.read_csv(workDir+"/dataset_all.csv",  encoding="cp949", header=None)
-        autocompleteList = df[0].values
-        print(autocompleteList)
-        data = {
-            'autocompleteList': autocompleteList
-        }
-        return Response(data)
 
 def keyword(request):
     key_list = []
     context = {}
     if request.method == "POST":
         weekday = request.POST['keyword']
-        year = int(weekday[:4])
-        w = int(weekday[6:])
-        print(year, w)
-        cal = datetime.date(2018,6,4)
+        
         try:
             con = mysql.connect(host = 'camel.cy5ept1oyktw.ap-northeast-2.rds.amazonaws.com',
             user = 'camel',
@@ -44,13 +30,17 @@ def keyword(request):
             use_unicode=True
             )
             cur = con.cursor()
-            
-            cur.execute("SELECT rank, keyword FROM keywords")
+            cur.execute("SELECT weeks, rank, keyword FROM keywords WHERE weeks = 20180625")
             data_list = cur.fetchall()
+            print("query OK")
             for key in data_list:
-                if key[0] <= 20:
-                    key_list.append(key[1])
+                
+                # 20위까지 리스트에 저장
+                if key[1] <= 20:
+                    key_list.append(key[2])
+            
             context = {
+                "weekday": weekday,
                 "key": key_list,
             }
             con.close()
@@ -69,6 +59,9 @@ class ChartData(APIView):
     def get(self, request, format=None):
 
         # 데이터 폴더 열어 목록 가져오기
+        week = request.GET['week']           # 주
+        clickword = request.GET['word'] # 클릭한 아이템
+        
         module_dir = os.path.dirname(__file__)
         workDir = os.path.join(module_dir, 'src/naverdata')
         filename_list = []
@@ -77,21 +70,22 @@ class ChartData(APIView):
                 filename_list.append(filename)
 
         # 6주전 주차로 초기화
-        cal = datetime.date(2018,6,4)
+
+        cal = datetime.date(2018,6,26)
         cal = cal - datetime.timedelta(days=7*6)
         iso = cal.isocalendar()[1]
+
         # 이전 검색 순위 찾기
-        word = request.GET["word"]
-        print("word:",word)
         first_data = []
         for filename in filename_list:
             # 주 구하기 (파일명은 yyyymmdd.csv 이어야 합니다.)
             csv_isodate = datetime.date(int(filename[:4]), int(filename[4:6]), int(filename[6:8])).isocalendar()[1]
             if csv_isodate >= iso and csv_isodate < iso + 6:
                 openfile = pd.read_csv(workDir + '/' + filename, encoding="cp949")
-                if word in openfile["item"].values:
-                    key_data = openfile[openfile["item"] == word]["rank"].values[0]
-                    if key_data <= 200:
+                if clickword in openfile["item"].values:
+                    key_data = openfile[openfile["item"] == clickword]["rank"].values[0]
+                    # print(key_data)
+                    if key_data <= 40:
                         first_data.append(key_data)
                     else:
                         first_data.append(200)
@@ -104,12 +98,15 @@ class ChartData(APIView):
             db = 'trend',
             charset='utf8',
             use_unicode=True)
+
             cur = con.cursor()
-            cur.execute("SELECT rank FROM keywords WHERE keyword = '" + word + "'")
+            cur.execute("SELECT rank FROM keywords WHERE keyword = '" + clickword + "' AND weeks = '20180625'")
             data_list = cur.fetchall()
+            print(data_list)
             for ran in data_list:
-                print(ran)
+                print(ran[0])
                 first_data.append(ran[0])
+                
             con.close()
         except mysql.Error:
             print(mysql.Error)
@@ -126,13 +123,13 @@ class ChartData(APIView):
         lbstr = str(ju) + "주"
         labels.append(lbstr)
         
-
-
+    
+        print(len(labels), len(first_data))
 
         data = {
             "labels" : labels,
             "first_data" : first_data,
-            "word" : word,
+            "word" : clickword,
         }   
         return Response(data)
     
