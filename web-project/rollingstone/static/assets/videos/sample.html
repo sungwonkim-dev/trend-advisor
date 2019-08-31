@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script>
+$(function() {   
+    var startDate, endDate;
+    var selectCurrentWeek = function () {
+        window.setTimeout(function () {
+            $('.ui-weekpicker').find('.ui-datepicker-current-day a').addClass('ui-state-active').removeClass('ui-state-default');
+        }, 1);
+    }
+    var setDates = function (input) {
+        var $input = $(input);
+        var date = $input.datepicker('getDate');
+        if (date !== null) {
+            var firstDay = $input.datepicker("option", "firstDay");
+            var dayAdjustment = (date.getDay() - firstDay + 7) % 7;
+            startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - dayAdjustment);
+            endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - dayAdjustment + 6);
+    
+            var inst = $input.data('datepicker');
+            var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
+            $('#startDate').text($.datepicker.formatDate(dateFormat, startDate, inst.settings));
+            $('#endDate').text($.datepicker.formatDate(dateFormat, endDate, inst.settings));
+            $('#weekNo').text($.datepicker.iso8601Week(date));
+        }
+    }
+    $('.week-picker').datepicker({
+        dateFormat: 'yy-mm-dd',
+        showWeek: true,
+        beforeShow: function () {
+            $('#ui-datepicker-div').addClass('ui-weekpicker');
+            selectCurrentWeek();
+        },
+        onClose: function () {
+            $('#ui-datepicker-div').removeClass('ui-weekpicker');
+        },
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        onSelect: function (dateText, inst) {
+            setDates(this);
+            selectCurrentWeek();
+            $(this).change();
+        },
+        beforeShowDay: function (date) {
+            var cssClass = '';
+            if (date >= startDate && date <= endDate)
+                cssClass = 'ui-datepicker-current-day';
+            return [true, cssClass];
+        },
+        onChangeMonthYear: function (year, month, inst) {
+            selectCurrentWeek();
+        }
+    });
+    
+    setDates('.week-picker');
+    var $calendarTR = $('.ui-weekpicker .ui-datepicker-calendar tr');
+    $calendarTR.on('mousemove', function () {
+        $(this).find('td a').addClass('ui-state-hover');
+    });
+    $calendarTR.on('mouseleave', function () {
+        $(this).find('td a').removeClass('ui-state-hover');
+    });
+});
+</script>
+</head>
+<body>
+    <input class="week-picker">
+    <br /><br />
+    Week (<span id="weekNo"></span>): <span id="startDate"></span> - <span id="endDate"></span>
+</body>
+</html>

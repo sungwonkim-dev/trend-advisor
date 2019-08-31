@@ -1,11 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta charset="utf-8">
     <link href="{% static 'assets/css/bootstrap.min.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/main.css'%}" rel="stylesheet">
     <link href="{% static 'assets/css/Chart.min.css'%}" rel="stylesheet">
-    <title>main screen</title>
+    <link href="{% static 'assets/css/jquery-ui.min.css'%}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+    <link rel='shortcut icon' type='image/x-icon' href="{% static 'assets/images/icon.png' %}">
+    <title>장사는 타이밍: 홈</title>
 </head>
 
 <body>
@@ -14,13 +19,13 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#" onclick="location.reload()">
-                        <img src="{% static 'assets/images/title.png'%}" alt="logo">
+                        <img src="{% static 'assets/images/logo.png'%}" alt="logo">
                     </a>
+
                 </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="active"><a href="/" onclick="location.href='/'">Home</a></li>
                     <li><a href="/keyword" id="searchBtn">키워드</a></li>
-                    <li><a href="/graph" id="chartBtn">그래프</a></li>
                 </ul>
             </div>
             <div class="progress-container">
@@ -28,10 +33,10 @@
             </div>
         </nav>
     </header>
-    
+
     <div id="myVideo">
         <video width="100%" height="100%" autoplay muted loop>
-            <source src="{% static 'assets/videos/backvideo.mp4'%}" type="video/mp4">
+            <source src="{% static 'assets/videos/backvideo6.mp4'%}" type="video/mp4">
         </video>
     </div>
     <div class="first-area" id="home">
@@ -39,26 +44,26 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="row">
                     <div id="logo" class="text-center" style="padding-top:15%;">
-                        <img src="{% static 'assets/images/title.png'%}" style="width:70%; height:auto;" alt="이미지를 요청하지 못하였습니다.">
-                        <p style="font-family: '나눔스퀘어'">아이템과 날짜를 입력하세요</p>
+                        <img src="{% static 'assets/images/title.png'%}" style="width:70%; height:auto;"
+                            alt="이미지를 요청하지 못하였습니다.">
+                        <p>
+                            <h4
+                                style="color:rgb(255, 255, 255); text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
+                                날짜를 입력하세요.</h5>
+                        </p>
                     </div>
                     <!-- Search form -->
-                    <form role="form" id="form-buscar">
+                    <form method="POST" action="/keyword" role="form" id="form-buscar">
                         <div class="form-group">
-                            <div class="input-group md-form">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-success" type="date"
-                                        style="background: transparent; border:none; color:gray;">
-                                        <i class="glyphicon glyphicon-calendar" aria-hidden="true"></i>
-                                    </button>
-                                </span>
+                            {% csrf_token %}
+                            <div class="input-group md-form" style="width:50%; margin:auto; float:none;">
                                 <div class="main-search">
-                                    <input id="1" class="form-control input-lg" type="text" name="search"
-                                        placeholder="Search..." required />
+                                    <input id="weeklyDatePicker" class="form-control input-lg" type="week"
+                                        name="keyword" placeholder="Search..." required autocomplete="off" />
                                 </div>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success" type="submit"
-                                        style="background: transparent; border:none; color:gray;">
+                                    <button class="btn btn-success" type="submit" id="search-submit"
+                                        style="background: transparent; border:none; color:white;">
                                         <i class="glyphicon glyphicon-search" aria-hidden="true"></i>
                                     </button>
                                 </span>
@@ -69,23 +74,13 @@
             </div>
         </div>
     </div>
-    
-    <div class="container-fluid" style="background: white" id="help">
-        <div class="container">
-            <div class="final-area">
-                <h1>도움말</h1>
-                <p> 검색하면 그래프가 나오거나 키워드가 뿌려짐 </p>
-            </div>
-        </div>
-    </div>
+
     <footer>
         <div class="footer">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-5"></div>
-                    <div class="col-md-2">
-                        <p style="color:gray">web develop by rolling stone</p>
-                    </div>
+                    <p>Copyright Rolling Rocks. All Rights Reserved.</p>
                     <div class="col-md-6"></div>
                 </div>
             </div>
@@ -97,6 +92,9 @@
 <script src="{% static 'assets/js/jquery-3.4.1.min.js'%}"></script>
 <script src="{% static 'assets/js/bootstrap.min.js'%}"></script>
 <script src="{% static 'assets/js/Chart.min.js' %}"></script>
+<script src="{% static 'assets/js/jquery-ui.min.js'%}"></script>
 <script src="{% static 'assets/js/main.js'%}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 
 </html>
