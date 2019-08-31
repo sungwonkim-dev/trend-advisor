@@ -1,13 +1,13 @@
 ### 로컬에서 장고 실행방법
 
-#### 주의) 현재 개발버전은 아나콘다 환경이 아니므로 아나콘다 가상환경 실행중일시 `conda deactivate` 로 아나콘다 가상환경을 꺼주신뒤 사용해주시기 바랍니다.
+#### 아나콘다가 설치되어 있어야 합니다.
 
 0. 윈도우에서는 cmd, 리눅스 혹은 맥 환경에서는 shell로 실행시킵니다.
 
-1. 장고 프레임워크를 사용하기 위한 가상환경 실행법 입니다.  
-   `web-develop/venv/bin` 폴더로 이동  
-   리눅스(맥) 환경에서는 `source activate`  
-   윈도우 환경에서는 `activate`
+1. 장고 프레임워크를 사용하기 위한 가상환경 세팅 및 실행법 입니다.  
+   `web-project` 폴더로 이동합니다.  
+   아나콘다 가상환경을 새롭게 구성하고 싶다면 `conda env create -f conda_requirements.txt` 이후 conda activate djangoenv로 가상환경 실행  
+   본인의 아나콘다 가상환경에서 구성하고 싶다면 `conda activate '가상환경이름'`으로 본인의 가상환경 실행 후 `pip install -r pip_requirements.txt`로 필요 패키지 설치
    
 2. 다음 명령어로 로컬 서버를 실행시킵니다.  
    `web-develop/rollingstone`으로 이동  
@@ -16,13 +16,6 @@
    디폴트 포트번호는 8000 입니다만 본인의 포트번호가 다르게 설정되어있다면 실행이 안될 수도 있습니다.  
    그럴 경우에는 리눅스(맥) `python3 manage.py runserver 8000` / 윈도우 `python manage.py runserver 8000`으로 실행해보십시오.  
    서버가 실행되고 있는동안은 shell 혹은 cmd 창을 끄지마십시오.  
-   
-   #### (option)
-   만일 가상환경에서 사용하고 싶지 않거나 가상환경에 설치된 패키지가 제대로 작동하지 않을시 다음 명령어를 실행하여 주십시오.  
-   `web-develop/rollingstone` 폴더로 이동 합니다.  
-   리눅스(맥) : `pip3 install -r requirements.txt`  
-   윈도우 : `pip install -r requirements.txt`  
-   해당 프레임워크를 사용하는데 필요한 패키지가 설치됩니다.  
    
 3. 다음은 웹 브라우저에서 실행법입니다.  
    웹 브라우저를 실행합니다.  

@@ -25,7 +25,13 @@ SECRET_KEY = 'p614vx&kgkd9!g+1*r0al53p&h3via-)0%^xs)1dfp4qk%h6%@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'ec2-52-79-67-245.ap-northeast-2.compute.amazonaws.com',
+    '127.0.0.1',
+    'localhost',
+    '0.0.0.0',
+    '',
+]
 
 
 # Application definition
@@ -38,8 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'chartjs',
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -75,14 +80,26 @@ WSGI_APPLICATION = 'rollingstone.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 
+}
+try:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': 'camel.cy5ept1oyktw.ap-northeast-2.rds.amazonaws.com',
+            'USER': 'camel',
+            'PASSWORD': 'mypassword',
+            'NAME': 'trend',
+        }
+    }
+except:
+    DATABASES = {
+        'default':{
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -108,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
