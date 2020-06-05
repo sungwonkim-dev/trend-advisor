@@ -1,5 +1,5 @@
 certifi==2019.6.16
-Django==2.2.4
+Django==2.2.13
 djangorestframework==3.10.2
 mysqlclient==1.3.14
 numpy==1.17.0
